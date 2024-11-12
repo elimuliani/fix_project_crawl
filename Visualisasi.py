@@ -28,6 +28,8 @@ if uploaded_file is not None:
     st.pyplot(fig)
 
     # Visualisasi PESTEL dan Sentimen
+    # Define the custom order for PESTEL categories
+pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
     st.write("Distribusi Sentimen Berdasarkan Kategori PESTEL:")
     plt.figure(figsize=(10, 6))
     sns.set_theme(style="whitegrid")
