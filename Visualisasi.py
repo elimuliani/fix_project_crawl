@@ -106,4 +106,4 @@ if uploaded_file:
     csv = data.to_csv(index=False).encode('utf-8')
     st.download_button("Download CSV", data=csv, file_name='data_with_sentiment_and_pestel.csv', mime='text/csv')
 
-streamlit run Visualisasi.app.py
+streamlit run Visualisasi.py
