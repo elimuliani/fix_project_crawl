@@ -35,7 +35,7 @@ if uploaded_file:
 
     # Tampilkan data yang difilter
     st.write(f"Data dengan Sentimen *{selected_sentiment}*:")
-    st.dataframe(filtered_data)
+    st.dataframe(filtered_data, use_container_width=True)  # Menampilkan seluruh data yang difilter
 
     # Pilihan untuk melihat data berdasarkan kategori PESTEL
     st.write("Klik untuk melihat data berdasarkan Kategori PESTEL:")
@@ -49,7 +49,7 @@ if uploaded_file:
 
     # Tampilkan data yang difilter dan sentimen terkait
     st.write(f"Data dengan Kategori PESTEL *{selected_pestel}*:")
-    st.dataframe(pestel_filtered_data)
+    st.dataframe(pestel_filtered_data, use_container_width=True)  # Menampilkan seluruh data terkait kategori PESTEL
     st.write(f"Kategori PESTEL *{selected_pestel}* terkait dengan Sentimen: {', '.join(sentiment_in_pestel)}")
 else:
     st.error("File CSV tidak ditemukan. Silakan unggah file yang sesuai.")
