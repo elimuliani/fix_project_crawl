@@ -69,7 +69,7 @@ if uploaded_file:
         color_discrete_sequence=px.colors.qualitative.Set3,  # Warna menarik
         title="Distribusi Berita PESTEL"
     )
-    
+    st.plotly_chart(fig_pie)
 
 else:
     st.error("File CSV tidak ditemukan. Silakan unggah file yang sesuai.")
