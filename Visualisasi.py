@@ -1,55 +1,85 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Judul aplikasi web
 st.title("Analisis PESTEL dan Sentimen Berita PLN")
 
-# Membaca dataset dari file CSV
-uploaded_file = "data_with_sentiment_and_pestel.csv"
+# Unggah file CSV
+uploaded_file = st.file_uploader("Unggah file CSV", type=["csv"])
 
 if uploaded_file:
+    # Membaca dataset
     data = pd.read_csv(uploaded_file)
-    
-    # Tampilkan dataset
+
     st.write("Tabel Data Analisis:")
     st.dataframe(data)
-    
-    # Tampilkan distribusi sentimen
-    st.write("Distribusi Sentimen:")
-    sentiment_counts = data['Sentiment'].value_counts()
-    fig, ax = plt.subplots()
-    sentiment_counts.plot(kind='bar', color=['green', 'gray'], ax=ax)
-    ax.set_title("Distribusi Sentimen")
-    ax.set_xlabel("Sentimen")
-    ax.set_ylabel("Jumlah")
+
+    # Visualisasi Distribusi Sentimen
+    st.write("Distribusi Sentimen Berita:")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.countplot(data=data, x='Sentiment', palette='coolwarm', ax=ax)
+    ax.set_title("Distribusi Sentimen Berita", fontsize=16)
+    ax.set_xlabel("Kategori Sentimen", fontsize=14)
+    ax.set_ylabel("Jumlah", fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     st.pyplot(fig)
 
-    # Pilihan untuk melihat data berdasarkan sentimen
-    st.write("Klik untuk melihat data berdasarkan Sentimen:")
-    selected_sentiment = st.radio("Pilih Sentimen", options=data['Sentiment'].unique())
+    # Visualisasi Distribusi PESTEL dan Sentimen
+    st.write("Distribusi Sentimen berdasarkan Kategori PESTEL:")
+    fig, ax = plt.subplots(figsize=(12, 7))
+    pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
+    sns.countplot(
+        data=data,
+        x='PESTEL_Category',
+        hue='Sentiment',
+        order=pestel_order,
+        palette='coolwarm',
+        ax=ax
+    )
+    ax.set_title('Distribusi Sentimen berdasarkan Kategori PESTEL', fontsize=16)
+    ax.set_xlabel('Kategori PESTEL', fontsize=14)
+    ax.set_ylabel('Jumlah', fontsize=14)
+    plt.xticks(rotation=45, fontsize=12)
+    plt.yticks(fontsize=12)
+    ax.legend(title='Sentimen', fontsize=12)
+    st.pyplot(fig)
 
-    # Filter data berdasarkan sentimen yang dipilih
-    filtered_data = data[data['Sentiment'] == selected_sentiment]
+    # Pie Chart Interaktif PESTEL
+    st.write("Distribusi Berita berdasarkan Kategori PESTEL:")
+    pestel_counts = data['PESTEL_Category'].value_counts().reset_index()
+    pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
 
-    # Tampilkan data yang difilter
-    st.write(f"Data dengan Sentimen *{selected_sentiment}*:")
-    st.dataframe(filtered_data, use_container_width=True)  # Menampilkan seluruh data yang difilter
+    # Buat pie chart menggunakan Plotly
+    fig_pie = px.pie(
+        pestel_counts, 
+        names='PESTEL_Category', 
+        values='Jumlah', 
+        color='PESTEL_Category',
+        color_discrete_sequence=px.colors.qualitative.Set2,  # Warna yang menarik
+        title="Distribusi Berita PESTEL"
+    )
 
-    # Pilihan untuk melihat data berdasarkan kategori PESTEL
-    st.write("Klik untuk melihat data berdasarkan Kategori PESTEL:")
-    selected_pestel = st.selectbox("Pilih Kategori PESTEL", options=data['PESTEL_Category'].unique())
+    # Tambahkan tautan interaktif
+    fig_pie.update_traces(
+        hoverinfo="label+percent+value",
+        textinfo="label+percent",
+        pull=[0.1 if i == 0 else 0 for i in range(len(pestel_counts))],  # Highlight satu kategori
+    )
 
-    # Filter data berdasarkan kategori PESTEL
-    pestel_filtered_data = data[data['PESTEL_Category'] == selected_pestel]
+    # Tampilkan grafik pie chart
+    st.plotly_chart(fig_pie)
 
-    # Identifikasi sentimen terkait PESTEL
-    sentiment_in_pestel = pestel_filtered_data['Sentiment'].unique()
+    # Klik pada kategori PESTEL untuk melihat berita
+    selected_category = st.selectbox("Pilih Kategori PESTEL untuk melihat berita terkait:", pestel_counts['PESTEL_Category'])
+    filtered_data = data[data['PESTEL_Category'] == selected_category]
 
-    # Tampilkan data yang difilter dan sentimen terkait
-    st.write(f"Data dengan Kategori PESTEL *{selected_pestel}*:")
-    st.dataframe(pestel_filtered_data, use_container_width=True)  # Menampilkan seluruh data terkait kategori PESTEL
-    st.write(f"Kategori PESTEL *{selected_pestel}* terkait dengan Sentimen: {', '.join(sentiment_in_pestel)}")
+    st.write(f"Berita terkait kategori *{selected_category}*:")
+    st.dataframe(filtered_data[['Title', 'Link']], use_container_width=True)
+
+    st.write("Klik tautan di kolom 'Link' untuk membaca berita.")
 else:
-    st.error("File CSV tidak ditemukan. Silakan unggah file yang sesuai.")
+    st.error("Silakan unggah file CSV untuk memulai analisis.")
