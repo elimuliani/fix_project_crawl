@@ -8,11 +8,15 @@ import plotly.express as px
 st.title("Analisis PESTEL dan Sentimen Berita PLN")
 
 # Membaca dataset dari file CSV
-uploaded_file = "data_with_sentiment_and_pestel.csv"
+uploaded_file = "/mnt/data/data_with_sentiment_and_pestel.csv"
 
 if uploaded_file:
     # Membaca dataset
     data = pd.read_csv(uploaded_file)
+    
+    # Tampilkan jumlah total data yang dimiliki
+    total_data = len(data)
+    st.write(f"Total Jumlah Data: {total_data} baris")
     
     # Tampilkan dataset
     st.write("Tabel Data Analisis:")
@@ -59,12 +63,16 @@ if uploaded_file:
     pestel_counts = data['PESTEL_Category'].value_counts().reset_index()
     pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
 
+    # Urutan kategori PESTEL
+    pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
+
     # Buat pie chart menggunakan Plotly
     fig_pie = px.pie(
         pestel_counts,
         names='PESTEL_Category',
         values='Jumlah',
         color='PESTEL_Category',
+        category_orders={'PESTEL_Category': pestel_order},  # Urutkan sesuai PESTEL
         color_discrete_sequence=px.colors.qualitative.Set3,  # Warna menarik
         title="Distribusi Berita PESTEL"
     )
@@ -73,7 +81,7 @@ if uploaded_file:
     st.plotly_chart(fig_pie)
 
     # Klik pada kategori PESTEL untuk melihat berita
-    selected_pie_category = st.selectbox("Pilih Kategori PESTEL untuk melihat data terkait:", pestel_counts['PESTEL_Category'])
+    selected_pie_category = st.selectbox("Pilih Kategori PESTEL untuk melihat data terkait:", pestel_order)
     pie_filtered_data = data[data['PESTEL_Category'] == selected_pie_category]
 
     st.write(f"Data dengan Kategori PESTEL *{selected_pie_category}*:")
