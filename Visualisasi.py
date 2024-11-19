@@ -29,15 +29,19 @@ if uploaded_file:
     st.write("Tabel Data Analisis:")
     st.dataframe(data)
 
-    # Tampilkan distribusi sentimen
-    st.write("Distribusi Sentimen:")
-    sentiment_counts = data['Sentiment'].value_counts()
+   # Tampilkan distribusi sentimen dengan bar plot
+st.write("Distribusi Sentimen:")
+sentiment_counts = data['Sentiment'].value_counts()
+
+if not sentiment_counts.empty:  # Pastikan data ada sebelum membuat plot
     fig, ax = plt.subplots()
-    sentiment_counts.plot(kind='bar', color=['green', 'gray', 'blue'], ax=ax)
+    sentiment_counts.plot(kind='bar', color=['green', 'gray'], ax=ax)
     ax.set_title("Distribusi Sentimen")
     ax.set_xlabel("Sentimen")
     ax.set_ylabel("Jumlah")
     st.pyplot(fig)
+else:
+    st.warning("Tidak ada data untuk distribusi sentimen.")
 
     # Filter data berdasarkan sentimen
     st.write("Klik untuk melihat data berdasarkan Sentimen:")
