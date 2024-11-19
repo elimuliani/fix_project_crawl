@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 # Judul aplikasi web
@@ -12,6 +11,12 @@ uploaded_file = "data_with_sentiment_and_pestel.csv"
 if uploaded_file:
     # Membaca dataset
     data = pd.read_csv(uploaded_file)
+
+    # Periksa nilai unik dalam kolom PESTEL_Category
+    st.write("Kategori PESTEL yang ada dalam data:", data['PESTEL_Category'].unique())
+
+    # Mengatasi nilai kosong (missing values) dalam kolom PESTEL_Category
+    data['PESTEL_Category'].fillna('Unknown', inplace=True)
 
     # Urutan kategori PESTEL
     pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
@@ -51,7 +56,9 @@ if uploaded_file:
 
     # Pie Chart Interaktif untuk PESTEL
     st.write("Distribusi Berita berdasarkan Kategori PESTEL:")
-    pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order).reset_index()
+    
+    # Menghitung jumlah setiap kategori PESTEL, termasuk yang tidak ada data
+    pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order, fill_value=0).reset_index()
     pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
 
     fig_pie = px.pie(
