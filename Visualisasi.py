@@ -13,6 +13,9 @@ if uploaded_file:
     # Membaca dataset
     data = pd.read_csv(uploaded_file)
 
+    # Memperbaiki penulisan salah ketik di kolom 'PESTEL_Category'
+    data['PESTEL_Category'] = data['PESTEL_Category'].replace({'Environtmental': 'Environmental'})
+
     # Urutan kategori PESTEL
     pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
 
@@ -51,11 +54,12 @@ if uploaded_file:
 
     # Pie Chart Interaktif untuk PESTEL
     st.write("Distribusi Berita berdasarkan Kategori PESTEL:")
-    
+
     # Menghitung jumlah setiap kategori PESTEL, termasuk yang tidak ada data
     pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order, fill_value=0).reset_index()
     pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
 
+    # Membuat Pie Chart setelah perbaikan
     fig_pie = px.pie(
         pestel_counts,
         names='PESTEL_Category',
