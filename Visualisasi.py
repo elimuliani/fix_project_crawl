@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 st.title("Analisis PESTEL dan Sentimen Berita PLN")
 
 # Membaca dataset dari file CSV
-uploaded_file = "/mnt/data/data_with_sentiment_and_pestel.csv"
+uploaded_file = "data_with_sentiment_and_pestel.csv"
 
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
