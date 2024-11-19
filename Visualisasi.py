@@ -69,14 +69,7 @@ if uploaded_file:
         color_discrete_sequence=px.colors.qualitative.Set3,  # Warna menarik
         title="Distribusi Berita PESTEL"
     )
-    st.plotly_chart(fig_pie)
-
-    # Klik pada kategori PESTEL di pie chart untuk melihat berita
-    st.write("Pilih Kategori PESTEL dari Pie Chart untuk melihat data terkait:")
-    selected_pie_category = st.selectbox("Pilih Kategori PESTEL:", pestel_order)
-    pie_filtered_data = data[data['PESTEL_Category'] == selected_pie_category]
-    st.write(f"Data dengan Kategori PESTEL *{selected_pie_category}*:")    
-    st.dataframe(pie_filtered_data, use_container_width=True)
+    
 
 else:
     st.error("File CSV tidak ditemukan. Silakan unggah file yang sesuai.")
