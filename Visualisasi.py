@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.express as px
 
 # Judul aplikasi web
@@ -12,12 +13,6 @@ if uploaded_file:
     # Membaca dataset
     data = pd.read_csv(uploaded_file)
 
-    # Periksa nilai unik dalam kolom PESTEL_Category
-    st.write("Kategori PESTEL yang ada dalam data:", data['PESTEL_Category'].unique())
-
-    # Mengatasi nilai kosong (missing values) dalam kolom PESTEL_Category
-    data['PESTEL_Category'].fillna('Unknown', inplace=True)
-
     # Urutan kategori PESTEL
     pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
 
@@ -29,19 +24,15 @@ if uploaded_file:
     st.write("Tabel Data Analisis:")
     st.dataframe(data)
 
-   # Tampilkan distribusi sentimen dengan bar plot
-st.write("Distribusi Sentimen:")
-sentiment_counts = data['Sentiment'].value_counts()
-
-if not sentiment_counts.empty:  # Pastikan data ada sebelum membuat plot
+    # Tampilkan distribusi sentimen
+    st.write("Distribusi Sentimen:")
+    sentiment_counts = data['Sentiment'].value_counts()
     fig, ax = plt.subplots()
-    sentiment_counts.plot(kind='bar', color=['green', 'gray'], ax=ax)
+    sentiment_counts.plot(kind='bar', color=['green', 'gray', 'blue'], ax=ax)
     ax.set_title("Distribusi Sentimen")
     ax.set_xlabel("Sentimen")
     ax.set_ylabel("Jumlah")
     st.pyplot(fig)
-else:
-    st.warning("Tidak ada data untuk distribusi sentimen.")
 
     # Filter data berdasarkan sentimen
     st.write("Klik untuk melihat data berdasarkan Sentimen:")
