@@ -44,8 +44,12 @@ if uploaded_file:
     st.dataframe(filtered_data, use_container_width=True)  # Menampilkan seluruh data yang difilter
 
     # Pilihan untuk melihat data berdasarkan kategori PESTEL
-    st.write("Klik untuk melihat data berdasarkan Kategori PESTEL:")
-    selected_pestel = st.selectbox("Pilih Kategori PESTEL", options=data['PESTEL_Category'].unique())
+     # Klik pada kategori PESTEL untuk melihat berita
+    selected_pie_category = st.selectbox("Pilih Kategori PESTEL untuk melihat data terkait:", pestel_order)
+    pie_filtered_data = data[data['PESTEL_Category'] == selected_pie_category]
+
+    st.write(f"Data dengan Kategori PESTEL *{selected_pie_category}*:")
+    st.dataframe(pie_filtered_data, use_container_width=True)
 
     # Filter data berdasarkan kategori PESTEL
     pestel_filtered_data = data[data['PESTEL_Category'] == selected_pestel]
