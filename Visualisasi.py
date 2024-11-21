@@ -8,7 +8,7 @@ from wordcloud import WordCloud
 st.title("Analisis PESTEL dan Sentimen Berita PLN")
 
 # Membaca dataset dari file CSV
-uploaded_file = "data_with_sentiment_and_pestel.csv"
+uploaded_file = st.file_uploader("Unggah File CSV", type="csv")
 
 if uploaded_file:
     # Membaca dataset
@@ -68,30 +68,34 @@ if uploaded_file:
     )
     st.plotly_chart(fig_pie)
 
-    # Analisis tren sentimen berdasarkan waktu
-    if 'pub_date' in data.columns and 'Sentiment' in data.columns:
-        data['pub_date'] = pd.to_datetime(data['pub_date'], errors='coerce')
-        data = data.dropna(subset=['pub_date'])
-        sentiment_trend = data.groupby([data['pub_date'].dt.date, 'Sentiment']).size().unstack()
-        fig, ax = plt.subplots(figsize=(10, 6))
-        sentiment_trend.plot(kind='line', ax=ax)
-        ax.set_title('Tren Sentimen Harian')
-        ax.set_xlabel('Tanggal')
-        ax.set_ylabel('Jumlah')
-        ax.legend(title='Sentimen')
-        st.pyplot(fig)
+    # **Tampilan "Top Problems" dalam Bentuk Tabel yang Menarik:**
 
-    # Analisis masalah utama (Top Problems)
     if 'title' in data.columns:
-        st.write("Masalah Utama yang Dilaporkan:")
+        st.subheader("Masalah Utama yang Dilaporkan")
+
+        # Mendapatkan 10 masalah utama
         top_problems = data['title'].value_counts().head(10)
-        fig, ax = plt.subplots(figsize=(10, 5))
-        top_problems.plot(kind='bar', color='purple', ax=ax)
-        ax.set_title('Masalah Utama yang Dilaporkan')
-        ax.set_xlabel('Masalah')
-        ax.set_ylabel('Jumlah')
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-        st.pyplot(fig)
+        
+        # Menampilkan tabel dalam layout kolom kiri-kanan
+        col1, col2 = st.columns([2, 1])
+
+        with col1:
+            # Menampilkan tabel dengan styling
+            st.write("Tabel Top 10 Masalah Utama:")
+            top_problems_df = top_problems.reset_index()
+            top_problems_df.columns = ['Masalah', 'Jumlah']
+            st.dataframe(top_problems_df.style.format({'Jumlah': '{:,}'}).background_gradient(axis=0, cmap='YlGnBu'))
+
+        with col2:
+            # Menampilkan visualisasi bar chart untuk top problems
+            st.write("Grafik Masalah Utama:")
+            fig, ax = plt.subplots(figsize=(8, 5))
+            top_problems.plot(kind='bar', color='purple', ax=ax)
+            ax.set_title('Top 10 Masalah Utama')
+            ax.set_xlabel('Masalah')
+            ax.set_ylabel('Jumlah')
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+            st.pyplot(fig)
 
     # Word Cloud untuk masalah utama
     if 'title' in data.columns:
