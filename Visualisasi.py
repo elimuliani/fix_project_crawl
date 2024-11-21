@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
+from wordcloud import WordCloud
 
 # Judul aplikasi web
 st.title("Analisis PESTEL dan Sentimen Berita PLN")
@@ -54,22 +55,79 @@ if uploaded_file:
 
     # Pie Chart Interaktif untuk PESTEL
     st.write("Distribusi Berita berdasarkan Kategori PESTEL:")
-
-    # Menghitung jumlah setiap kategori PESTEL, termasuk yang tidak ada data
     pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order, fill_value=0).reset_index()
     pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
-
-    # Membuat Pie Chart setelah perbaikan
     fig_pie = px.pie(
         pestel_counts,
         names='PESTEL_Category',
         values='Jumlah',
         color='PESTEL_Category',
-        category_orders={'PESTEL_Category': pestel_order},  # Urutkan sesuai PESTEL
-        color_discrete_sequence=px.colors.qualitative.Set3,  # Warna menarik
+        category_orders={'PESTEL_Category': pestel_order},
+        color_discrete_sequence=px.colors.qualitative.Set3,
         title="Distribusi Berita PESTEL"
     )
     st.plotly_chart(fig_pie)
+
+    # Analisis tren sentimen berdasarkan waktu
+    if 'pub_date' in data.columns and 'Sentiment' in data.columns:
+        data['pub_date'] = pd.to_datetime(data['pub_date'], errors='coerce')
+        data = data.dropna(subset=['pub_date'])
+        sentiment_trend = data.groupby([data['pub_date'].dt.date, 'Sentiment']).size().unstack()
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sentiment_trend.plot(kind='line', ax=ax)
+        ax.set_title('Tren Sentimen Harian')
+        ax.set_xlabel('Tanggal')
+        ax.set_ylabel('Jumlah')
+        ax.legend(title='Sentimen')
+        st.pyplot(fig)
+
+    # Analisis masalah utama (Top Problems)
+    if 'title' in data.columns:
+        st.write("Masalah Utama yang Dilaporkan:")
+        top_problems = data['title'].value_counts().head(10)
+        fig, ax = plt.subplots(figsize=(10, 5))
+        top_problems.plot(kind='bar', color='purple', ax=ax)
+        ax.set_title('Masalah Utama yang Dilaporkan')
+        ax.set_xlabel('Masalah')
+        ax.set_ylabel('Jumlah')
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+        st.pyplot(fig)
+
+    # Word Cloud untuk masalah utama
+    if 'title' in data.columns:
+        all_problems = ' '.join(data['title'].dropna())
+        wordcloud = WordCloud(width=800, height=400, background_color='white', colormap='viridis').generate(all_problems)
+        st.write("Word Cloud untuk Masalah Utama:")
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.imshow(wordcloud, interpolation='bilinear')
+        ax.axis('off')
+        st.pyplot(fig)
+
+    # Analisis laporan berdasarkan jam dan hari
+    if 'pub_date' in data.columns:
+        data['hour'] = data['pub_date'].dt.hour
+        data['day_of_week'] = data['pub_date'].dt.day_name()
+
+        # Distribusi laporan per jam
+        st.write("Distribusi Laporan per Jam:")
+        hourly_reports = data['hour'].value_counts().sort_index()
+        fig, ax = plt.subplots(figsize=(10, 5))
+        hourly_reports.plot(kind='bar', color='teal', ax=ax)
+        ax.set_title('Distribusi Laporan per Jam')
+        ax.set_xlabel('Jam')
+        ax.set_ylabel('Jumlah')
+        st.pyplot(fig)
+
+        # Distribusi laporan per hari
+        st.write("Distribusi Laporan per Hari:")
+        daily_reports = data['day_of_week'].value_counts()
+        fig, ax = plt.subplots(figsize=(10, 5))
+        daily_reports.plot(kind='bar', color='salmon', ax=ax)
+        ax.set_title('Distribusi Laporan per Hari')
+        ax.set_xlabel('Hari')
+        ax.set_ylabel('Jumlah')
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+        st.pyplot(fig)
 
 else:
     st.error("File CSV tidak ditemukan. Silakan unggah file yang sesuai.")
