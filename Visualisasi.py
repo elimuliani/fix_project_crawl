@@ -23,11 +23,13 @@ pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environment
 total_data = len(data)
 st.write(f"Total Jumlah Data: {total_data} baris")
 
-# Tampilkan distribusi sentimen
+# Tampilkan distribusi sentimen hanya untuk 'Positive' dan 'Neutral'
 st.write("Distribusi Sentimen:")
 sentiment_counts = data['Sentiment'].value_counts()
+# Filter hanya 'Positive' dan 'Neutral'
+sentiment_counts = sentiment_counts[sentiment_counts.index.isin(['Positive', 'Neutral'])]
 fig, ax = plt.subplots()
-sentiment_counts.plot(kind='bar', color=['green', 'gray', 'blue'], ax=ax)
+sentiment_counts.plot(kind='bar', color=['green', 'blue'], ax=ax)
 ax.set_title("Distribusi Sentimen")
 ax.set_xlabel("Sentimen")
 ax.set_ylabel("Jumlah")
@@ -35,7 +37,7 @@ st.pyplot(fig)
 
 # Filter data berdasarkan sentimen
 st.write("Klik untuk melihat data berdasarkan Sentimen:")
-selected_sentiment = st.radio("Pilih Sentimen", options=data['Sentiment'].unique())
+selected_sentiment = st.radio("Pilih Sentimen", options=['Positive', 'Neutral'])
 filtered_data = data[data['Sentiment'] == selected_sentiment]
 st.write(f"Data dengan Sentimen *{selected_sentiment}*:")
 st.dataframe(filtered_data, use_container_width=True)
@@ -126,4 +128,3 @@ if 'pub_date' in data.columns:
     ax.set_ylabel('Jumlah')
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
     st.pyplot(fig)
-
