@@ -1,59 +1,85 @@
 import streamlit as st
 import pandas as pd
 
-# Set page configuration
-st.set_page_config(
-    page_title="PESTEL Analysis Dashboard",
-    layout="wide",
+# Load data
+data = pd.read_csv('pln_clean.csv')
+
+# Title and Description
+st.set_page_config(page_title="Analisis PESTEL PLN", layout="wide")
+st.title("📊 Analisis Kategori PESTEL dan Sentimen")
+st.markdown("""
+    Selamat datang di dashboard analisis berita PLN berdasarkan kategori **PESTEL** dan **sentimen**.
+    Informasi dirancang dengan tata letak yang sederhana, rapi, dan mudah dipahami.
+""")
+
+# Sidebar
+st.sidebar.title("Navigasi")
+menu = st.sidebar.radio(
+    "Pilih Halaman:",
+    ["Beranda", "Berita dan Kategori", "Distribusi PESTEL & Sentimen"]
 )
 
-# Title
-st.title("PESTEL Analysis Dashboard")
+# Halaman 1: Beranda
+if menu == "Beranda":
+    st.header("Beranda")
+    st.markdown("""
+        Dashboard ini memberikan wawasan terkait:
+        - Kategori **PESTEL** dari berita terkait PLN.
+        - Analisis sentimen berita (Positif/Netral).
+        - Distribusi berita berdasarkan kategori.
+        
+        **Petunjuk Penggunaan:**
+        - Gunakan menu navigasi di sebelah kiri untuk berpindah halaman.
+        - Klik judul berita untuk membaca detailnya.
+    """)
 
-# Load CSV file
-file_path = "pln_clean.csv"  # Ganti dengan nama file CSV Anda
-try:
-    data = pd.read_csv(file_path)
-    st.success("Data berhasil dimuat!")
-except FileNotFoundError:
-    st.error("File CSV tidak ditemukan. Pastikan file berada di path yang benar.")
-    st.stop()
+# Halaman 2: Berita dan Kategori
+elif menu == "Berita dan Kategori":
+    st.header("📜 Daftar Berita berdasarkan PESTEL")
+    st.markdown("Klik judul berita untuk membaca lebih lanjut.")
+    
+    # Tampilkan data dalam card layout
+    for i, row in data.iterrows():
+        with st.container():
+            st.markdown(f"#### [{row['headline']}]({row['link']})")
+            st.markdown(f"**Kategori:** {row['PESTEL_Category']} | **Sentimen:** {row['Sentiment']}")
+            st.markdown("---")
 
-# Ensure the required columns exist
-required_columns = {"headline", "link", "category"}
-if not required_columns.issubset(data.columns):
-    st.error(f"File CSV harus memiliki kolom: {required_columns}")
-    st.stop()
+# Halaman 3: Distribusi PESTEL dan Sentimen
+elif menu == "Distribusi PESTEL & Sentimen":
+    st.header("📊 Distribusi Kategori PESTEL dan Sentimen")
+    st.markdown("Visualisasi distribusi kategori **PESTEL** berdasarkan sentimen.")
 
-# Group data by PESTEL categories
-categories = {
-    "Politik": "#FFD700",  # Yellow
-    "Ekonomi": "#32CD32",  # Green
-    "Sosial": "#1E90FF",  # Blue
-    "Teknologi": "#8A2BE2",  # Purple
-    "Lingkungan": "#FF6347",  # Red
-    "Legal": "#FF4500",  # Orange
-}
+    # Load visualization libraries
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-# Streamlit columns for categories
-cols = st.columns(len(categories))
+    # Sort PESTEL categories for better readability
+    pestel_order = ['Politik', 'Ekonomi', 'Sosial', 'Teknologi', 'Lingkungan', 'Legal']
 
-# Display each category and its clickable headlines
-for i, (category, color) in enumerate(categories.items()):
-    with cols[i]:
-        st.markdown(f"<div style='background-color: {color}; padding: 5px; border-radius: 10px;'>"
-                    f"<h4 style='text-align: center; color: white;'>{category}</h4>"
-                    f"</div>", unsafe_allow_html=True)
+    # Plot using Seaborn
+    plt.figure(figsize=(10, 6))
+    sns.countplot(
+        data=data,
+        x='PESTEL_Category',
+        hue='Sentiment',
+        order=pestel_order,
+        palette='viridis'
+    )
+    plt.title('Distribusi Sentimen berdasarkan Kategori PESTEL', fontsize=16)
+    plt.xlabel('Kategori PESTEL', fontsize=12)
+    plt.ylabel('Jumlah', fontsize=12)
+    plt.legend(title='Sentimen')
+    plt.xticks(rotation=45)
+    
+    # Show plot
+    st.pyplot(plt)
 
-        # Filter news for the current category
-        category_data = data[data["category"] == category]
+    st.markdown("Analisis ini membantu memahami distribusi berita dan sentimennya di berbagai kategori PESTEL.")
 
-        if category_data.empty:
-            st.write("Tidak ada berita.")
-        else:
-            for _, row in category_data.iterrows():
-                headline = row["headline"]
-                link = row["link"]
-                # Display clickable headline
-                st.markdown(f"- [{headline}]({link})")
-
+# Footer
+st.markdown("""
+    ---
+    **Dashboard Analisis PESTEL**  
+    Dibuat untuk mempermudah analisis berita PLN dengan tata letak sederhana dan ramah pengguna.
+""")
