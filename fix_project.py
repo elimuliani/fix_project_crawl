@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 
@@ -11,7 +12,7 @@ st.set_page_config(
 st.title("📊 PESTEL Analysis Dashboard")
 
 # Load CSV file
-file_path = "pln_clean.csv"  # Ganti sesuai dengan nama file CSV Anda
+file_path = "pln_clean.csv"  # Ganti dengan nama file CSV Anda
 try:
     data = pd.read_csv(file_path)
     st.success("Data berhasil dimuat!")
@@ -20,7 +21,7 @@ except FileNotFoundError:
     st.stop()
 
 # Ensure the required columns exist
-required_columns = {"headline", "content_text", "category"}
+required_columns = {"headline", "link", "category"}
 if not required_columns.issubset(data.columns):
     st.error(f"File CSV harus memiliki kolom: {required_columns}")
     st.stop()
@@ -35,30 +36,25 @@ categories = {
     "Legal": "#FF4500",  # Orange
 }
 
-# Create columns for layout
+# Streamlit columns for categories
 cols = st.columns(len(categories))
 
-# Display each category and related news
+# Display each category and its clickable headlines
 for i, (category, color) in enumerate(categories.items()):
     with cols[i]:
-        # Category Header with background color
-        st.markdown(f"""
-            <div style="background-color: {color}; padding: 20px; border-radius: 8px; margin-bottom: 10px;">
-                <h3 style="text-align: center; color: white; font-size: 18px; font-weight: bold;">{category}</h3>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div style='background-color: {color}; padding: 5px; border-radius: 10px;'>"
+                    f"<h4 style='text-align: center; color: white;'>{category}</h4>"
+                    f"</div>", unsafe_allow_html=True)
 
         # Filter news for the current category
         category_data = data[data["category"] == category]
 
         if category_data.empty:
-            st.write("Tidak ada berita untuk kategori ini.")
+            st.write("Tidak ada berita.")
         else:
-            # Display each news item under the category
             for _, row in category_data.iterrows():
                 headline = row["headline"]
-                content = row["content_text"]
-                st.markdown(f"**{headline}**")  # Headline as bold
-                st.write(f"{content[:150]}...")  # Show brief content
-                st.markdown("---")  # Add separator between articles
+                link = row["link"]
+                # Display clickable headline
+                st.markdown(f"- [{headline}]({link})")
 
