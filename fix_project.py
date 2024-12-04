@@ -26,7 +26,26 @@ data['Sentiment'] = data['Sentiment'].fillna('Netral')
 st.sidebar.title("Navigasi")
 menu = st.sidebar.radio(
     "Pilih Halaman:",
-    ["Beranda", "Berita dan Kategori", "Distribusi PESTEL & Sentimen"]
+    ["Beranda", "Berita dan Kategori", "Distribusi PESTEL & Sentimen"],
+    index=0,  # Set default menu ke "Beranda"
+    label_visibility="collapsed"  # Menyembunyikan label untuk tampilan lebih bersih
+)
+
+# Mengatur tema dan layout untuk lebih bersih dan nyaman
+st.set_page_config(page_title="Analisis PESTEL & Sentimen", layout="wide")
+st.markdown(
+    """
+    <style>
+    .css-18e3th9 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .css-1v3fvcr {
+        font-size: 16px;
+    }
+    </style>
+    """, 
+    unsafe_allow_html=True
 )
 
 # Halaman Beranda
@@ -34,15 +53,22 @@ if menu == "Beranda":
     st.title("📊 Analisis PESTEL dan Sentimen")
     st.markdown("""
         Selamat datang di dashboard analisis berita PLN berdasarkan kategori **PESTEL** dan **Sentimen**.
-    """)
+        Pilih menu di sidebar untuk mulai menjelajah.
+    """, unsafe_allow_html=True)
 
 # Halaman Berita dan Kategori
 elif menu == "Berita dan Kategori":
     st.title("📜 Daftar Berita")
     st.markdown("Klik judul berita untuk membaca lebih lanjut.")
+    st.write("")
+
+    # Display berita dengan layout yang rapi dan bersih
     for i, row in data.iterrows():
-        st.markdown(f"#### [{row['headline']}]({row['link']})")
-        st.markdown(f"**Kategori:** {row['category']} | **Sentimen:** {row['Sentiment']}")
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.markdown(f"#### [{row['headline']}]({row['link']})")
+        with col2:
+            st.markdown(f"**Kategori:** {row['category']} | **Sentimen:** {row['Sentiment']}")
         st.markdown("---")
 
 # Halaman Distribusi PESTEL & Sentimen
@@ -51,8 +77,8 @@ elif menu == "Distribusi PESTEL & Sentimen":
     import matplotlib.pyplot as plt
     import seaborn as sns
 
-    # Plot
-    plt.figure(figsize=(10, 6))
+    # Menambahkan padding dan mengatur ukuran tampilan plot agar lebih nyaman
+    plt.figure(figsize=(12, 7))
     sns.countplot(
         data=data,
         x='category',  # Pastikan ini sesuai dengan kolom yang benar yaitu 'category'
@@ -63,6 +89,6 @@ elif menu == "Distribusi PESTEL & Sentimen":
     plt.title('Distribusi Sentimen berdasarkan Kategori PESTEL', fontsize=16)
     plt.xlabel('Kategori PESTEL', fontsize=12)
     plt.ylabel('Jumlah', fontsize=12)
-    plt.legend(title='Sentimen')
-    plt.xticks(rotation=45)
+    plt.legend(title='Sentimen', loc='upper right', fontsize=10)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
     st.pyplot(plt)
