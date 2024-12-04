@@ -1,96 +1,77 @@
 import streamlit as st
 import pandas as pd
 
-# Set page config harus dipanggil di awal
-st.set_page_config(page_title="Analisis PESTEL & Sentimen", layout="wide")
+# Set page configuration
+st.set_page_config(
+    page_title="PESTEL Analysis Dashboard",
+    layout="wide",
+)
 
-# Load file CSV
+# Title
+st.title("📊 PESTEL Analysis Dashboard")
+
+# Load CSV file
+file_path = "pln_clean.csv"  # Ganti sesuai dengan nama file CSV Anda
 try:
-    data = pd.read_csv('pln_clean.csv')
-    st.write("File CSV berhasil dimuat.")
-except Exception as e:
-    st.error(f"Terjadi kesalahan saat memuat file CSV: {e}")
+    data = pd.read_csv(file_path)
+    st.success("Data berhasil dimuat!")
+except FileNotFoundError:
+    st.error("File CSV tidak ditemukan. Pastikan file berada di path yang benar.")
     st.stop()
 
-# Periksa apakah kolom yang dibutuhkan ada
-required_columns = ['headline', 'link', 'category', 'Sentiment']
-for col in required_columns:
-    if col not in data.columns:
-        st.error(f"Kolom '{col}' tidak ditemukan dalam file CSV.")
-        st.stop()
+# Ensure the required columns exist
+required_columns = {"headline", "content_text", "category"}
+if not required_columns.issubset(data.columns):
+    st.error(f"File CSV harus memiliki kolom: {required_columns}")
+    st.stop()
 
-# Pastikan tidak ada data kosong dan sesuaikan kolom
-data['headline'] = data['headline'].fillna('Judul Tidak Tersedia')
-data['link'] = data['link'].fillna('#')
-data['category'] = data['category'].fillna('Tidak Dikategorikan')  # Menggunakan 'category' bukan 'PESTEL_Category'
-data['Sentiment'] = data['Sentiment'].fillna('Netral')
+# Group data by PESTEL categories
+categories = {
+    "Political": "#FFD700",  # Yellow
+    "Economic": "#32CD32",  # Green
+    "Social": "#1E90FF",  # Blue
+    "Technological": "#8A2BE2",  # Purple
+    "Environmental": "#FF6347",  # Red
+    "Legal": "#FF4500",  # Orange
+}
 
-# Sidebar untuk navigasi
-st.sidebar.title("Navigasi")
-menu = st.sidebar.radio(
-    "Pilih Halaman:",
-    ["Beranda", "Berita dan Kategori", "Distribusi PESTEL & Sentimen"],
-    index=0,  # Set default menu ke "Beranda"
-    label_visibility="collapsed"  # Menyembunyikan label untuk tampilan lebih bersih
-)
-
-# Mengatur tema dan layout untuk lebih bersih dan nyaman
-st.markdown(
-    """
+# Create a clean layout using columns
+st.markdown("""
     <style>
-    .css-18e3th9 {
-        font-size: 20px;
-        font-weight: bold;
+    .category-box {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .css-1v3fvcr {
-        font-size: 16px;
+    .headline {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+    .content {
+        font-size: 14px;
+        color: #555;
     }
     </style>
-    """, 
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# Halaman Beranda
-if menu == "Beranda":
-    st.title("📊 Analisis PESTEL dan Sentimen")
-    st.markdown("""
-        Selamat datang di dashboard analisis berita PLN berdasarkan kategori **PESTEL** dan **Sentimen**.
-        Pilih menu di sidebar untuk mulai menjelajah.
-    """)
+# Display each category and related news
+for category, color in categories.items():
+    st.markdown(f"<div class='category-box' style='background-color: {color};'>"
+                f"<h3 style='color: white; text-align: center;'>{category}</h3></div>", unsafe_allow_html=True)
 
-# Halaman Berita dan Kategori
-elif menu == "Berita dan Kategori":
-    st.title("📜 Daftar Berita")
-    st.markdown("Klik judul berita untuk membaca lebih lanjut.")
-    st.write("")
+    # Filter news for the current category
+    category_data = data[data["category"] == category]
 
-    # Display berita dengan layout yang rapi dan bersih
-    for i, row in data.iterrows():
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.markdown(f"#### [{row['headline']}]({row['link']})")
-        with col2:
-            st.markdown(f"**Kategori:** {row['category']} | **Sentimen:** {row['Sentiment']}")
-        st.markdown("---")
+    if category_data.empty:
+        st.write("Tidak ada berita untuk kategori ini.")
+    else:
+        # Display the news with headline and summary
+        for _, row in category_data.iterrows():
+            headline = row["headline"]
+            content = row["content_text"]
+            st.markdown(f"<div class='headline'>{headline}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='content'>{content[:150]}...</div>", unsafe_allow_html=True)
+            st.markdown("---")  # Add separator between news articles
 
-# Halaman Distribusi PESTEL & Sentimen
-elif menu == "Distribusi PESTEL & Sentimen":
-    st.title("📊 Distribusi PESTEL dan Sentimen")
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    # Menambahkan padding dan mengatur ukuran tampilan plot agar lebih nyaman
-    plt.figure(figsize=(12, 7))
-    sns.countplot(
-        data=data,
-        x='category',  # Pastikan ini sesuai dengan kolom yang benar yaitu 'category'
-        hue='Sentiment',
-        order=['Politik', 'Ekonomi', 'Sosial', 'Teknologi', 'Lingkungan', 'Legal'],
-        palette='viridis'
-    )
-    plt.title('Distribusi Sentimen berdasarkan Kategori PESTEL', fontsize=16)
-    plt.xlabel('Kategori PESTEL', fontsize=12)
-    plt.ylabel('Jumlah', fontsize=12)
-    plt.legend(title='Sentimen', loc='upper right', fontsize=10)
-    plt.xticks(rotation=45, ha='right', fontsize=10)
-    st.pyplot(plt)
