@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+# Set page config harus dipanggil di awal
+st.set_page_config(page_title="Analisis PESTEL & Sentimen", layout="wide")
+
 # Load file CSV
 try:
     data = pd.read_csv('pln_clean.csv')
@@ -32,7 +35,6 @@ menu = st.sidebar.radio(
 )
 
 # Mengatur tema dan layout untuk lebih bersih dan nyaman
-st.set_page_config(page_title="Analisis PESTEL & Sentimen", layout="wide")
 st.markdown(
     """
     <style>
@@ -54,7 +56,7 @@ if menu == "Beranda":
     st.markdown("""
         Selamat datang di dashboard analisis berita PLN berdasarkan kategori **PESTEL** dan **Sentimen**.
         Pilih menu di sidebar untuk mulai menjelajah.
-    """, unsafe_allow_html=True)
+    """)
 
 # Halaman Berita dan Kategori
 elif menu == "Berita dan Kategori":
