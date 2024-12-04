@@ -16,10 +16,10 @@ for col in required_columns:
         st.error(f"Kolom '{col}' tidak ditemukan dalam file CSV.")
         st.stop()
 
-# Pastikan tidak ada data kosong
+# Pastikan tidak ada data kosong dan sesuaikan kolom
 data['headline'] = data['headline'].fillna('Judul Tidak Tersedia')
 data['link'] = data['link'].fillna('#')
-data['category'] = data['PESTEL_Category'].fillna('Tidak Dikategorikan')
+data['category'] = data['category'].fillna('Tidak Dikategorikan')  # Menggunakan 'category' bukan 'PESTEL_Category'
 data['Sentiment'] = data['Sentiment'].fillna('Netral')
 
 # Sidebar untuk navigasi
@@ -42,10 +42,10 @@ elif menu == "Berita dan Kategori":
     st.markdown("Klik judul berita untuk membaca lebih lanjut.")
     for i, row in data.iterrows():
         st.markdown(f"#### [{row['headline']}]({row['link']})")
-        st.markdown(f"**Kategori:** {row['PESTEL_Category']} | **Sentimen:** {row['Sentiment']}")
+        st.markdown(f"**Kategori:** {row['category']} | **Sentimen:** {row['Sentiment']}")
         st.markdown("---")
 
-# Halaman Distribusi
+# Halaman Distribusi PESTEL & Sentimen
 elif menu == "Distribusi PESTEL & Sentimen":
     st.title("📊 Distribusi PESTEL dan Sentimen")
     import matplotlib.pyplot as plt
@@ -55,7 +55,7 @@ elif menu == "Distribusi PESTEL & Sentimen":
     plt.figure(figsize=(10, 6))
     sns.countplot(
         data=data,
-        x='Category',
+        x='category',  # Pastikan ini sesuai dengan kolom yang benar yaitu 'category'
         hue='Sentiment',
         order=['Politik', 'Ekonomi', 'Sosial', 'Teknologi', 'Lingkungan', 'Legal'],
         palette='viridis'
