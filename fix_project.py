@@ -55,7 +55,7 @@ elif menu == "Distribusi PESTEL & Sentimen":
     plt.figure(figsize=(10, 6))
     sns.countplot(
         data=data,
-        x='PESTEL_Category',
+        x='Category',
         hue='Sentiment',
         order=['Politik', 'Ekonomi', 'Sosial', 'Teknologi', 'Lingkungan', 'Legal'],
         palette='viridis'
