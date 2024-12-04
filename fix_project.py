@@ -35,42 +35,30 @@ categories = {
     "Legal": "#FF4500",  # Orange
 }
 
-# Create a clean layout using columns
-st.markdown("""
-    <style>
-    .category-box {
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .headline {
-        font-size: 16px;
-        font-weight: bold;
-        color: #333;
-    }
-    .content {
-        font-size: 14px;
-        color: #555;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# Create columns for layout
+cols = st.columns(len(categories))
 
 # Display each category and related news
-for category, color in categories.items():
-    st.markdown(f"<div class='category-box' style='background-color: {color};'>"
-                f"<h3 style='color: white; text-align: center;'>{category}</h3></div>", unsafe_allow_html=True)
+for i, (category, color) in enumerate(categories.items()):
+    with cols[i]:
+        # Category Header with background color
+        st.markdown(f"""
+            <div style="background-color: {color}; padding: 20px; border-radius: 8px; margin-bottom: 10px;">
+                <h3 style="text-align: center; color: white; font-size: 18px; font-weight: bold;">{category}</h3>
+            </div>
+        """, unsafe_allow_html=True)
 
-    # Filter news for the current category
-    category_data = data[data["category"] == category]
+        # Filter news for the current category
+        category_data = data[data["category"] == category]
 
-    if category_data.empty:
-        st.write("Tidak ada berita untuk kategori ini.")
-    else:
-        # Display the news with headline and summary
-        for _, row in category_data.iterrows():
-            headline = row["headline"]
-            content = row["content_text"]
-            st.markdown(f"<div class='headline'>{headline}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='content'>{content[:150]}...</div>", unsafe_allow_html=True)
-            st.markdown("---")  # Add separator between news articles
+        if category_data.empty:
+            st.write("Tidak ada berita untuk kategori ini.")
+        else:
+            # Display each news item under the category
+            for _, row in category_data.iterrows():
+                headline = row["headline"]
+                content = row["content_text"]
+                st.markdown(f"**{headline}**")  # Headline as bold
+                st.write(f"{content[:150]}...")  # Show brief content
+                st.markdown("---")  # Add separator between articles
+
