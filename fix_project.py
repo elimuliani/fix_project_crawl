@@ -27,11 +27,11 @@ if not required_columns.issubset(data.columns):
 
 # Group data by PESTEL categories
 categories = {
-    "Political": "#FFD700",  # Yellow
-    "Economic": "#32CD32",  # Green
-    "Social": "#1E90FF",  # Blue
-    "Technological": "#8A2BE2",  # Purple
-    "Environmental": "#FF6347",  # Red
+    "Politik": "#FFD700",  # Yellow
+    "Ekonomi": "#32CD32",  # Green
+    "Sosial": "#1E90FF",  # Blue
+    "Teknologi": "#8A2BE2",  # Purple
+    "Lingkungan": "#FF6347",  # Red
     "Legal": "#FF4500",  # Orange
 }
 
