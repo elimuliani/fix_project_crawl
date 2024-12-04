@@ -45,7 +45,7 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     .headline {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         color: #333;
     }
@@ -74,4 +74,3 @@ for category, color in categories.items():
             st.markdown(f"<div class='headline'>{headline}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='content'>{content[:150]}...</div>", unsafe_allow_html=True)
             st.markdown("---")  # Add separator between news articles
-
