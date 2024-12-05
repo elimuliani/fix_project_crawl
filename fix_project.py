@@ -46,11 +46,20 @@ cols = st.columns(len(categories))
 # Dictionary to store the count of news for each category
 category_counts = {category: 0 for category in categories_order}
 
+# Dropdown untuk memilih kategori dari pie chart
+selected_pestel_category = st.sidebar.selectbox(
+    "Pilih Kategori PESTEL untuk Fokus:",
+    options=["Semua"] + categories_order,
+)
+
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
 
 for i, category in enumerate(categories_order):
-    with cols[i]:
+    if selected_pestel_category != "Semua" and selected_pestel_category != category:
+        continue  # Skip rendering this category if it does not match the selected category
+
+    with cols[i % len(cols)]:
         color = categories[category]
         st.markdown(f"<div style='background-color: {color}; padding: 10px; border-radius: 10px;'>"
                     f"<h4 style='text-align: center; color: white;'>{category}</h4>"
@@ -81,9 +90,6 @@ for i, category in enumerate(categories_order):
                 link = row["link"]
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
-
-            # Update the category count based on the number of items displayed on this page
-            category_counts[category] += len(page_data)
 
             # If there are multiple pages, display navigation
             if total_pages > 1:
@@ -124,12 +130,7 @@ fig.update_layout(
     margin=dict(t=20, b=10, l=10, r=10),  # Reduce unnecessary margin
     height=350,  # Adjust height for compactness
     title_x=0.5,  # Center the title
-    clickmode="event+select",  # Enable clicking on segments
 )
 
-# Add interactivity for clicking the chart
-selected_category = st.plotly_chart(fig, use_container_width=True)
-if selected_category:
-    clicked_category = selected_category.get("points", [{}])[0].get("label")
-    if clicked_category in st.session_state:
-        st.session_state[f"page_{clicked_category}"] = 1  # Reset page to 1 for clicked category
+# Display the interactive pie chart
+st.plotly_chart(fig, use_container_width=True)
