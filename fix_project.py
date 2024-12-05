@@ -73,38 +73,18 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Add pagination controls
-            st.markdown(
-                f"""
-                <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
-                    <button onclick="document.location.reload()" style="
-                        font-size: 12px; 
-                        width: 30px; 
-                        height: 30px; 
-                        border: 1px solid #ccc; 
-                        border-radius: 50%; 
-                        background-color: #f9f9f9; 
-                        cursor: pointer;"
-                        {'' if current_page > 1 else 'disabled'}>-</button>
-                    <span style="margin: 0 10px; font-size: 14px;">Halaman {current_page}/{total_pages}</span>
-                    <button onclick="document.location.reload()" style="
-                        font-size: 12px; 
-                        width: 30px; 
-                        height: 30px; 
-                        border: 1px solid #ccc; 
-                        border-radius: 50%; 
-                        background-color: #f9f9f9; 
-                        cursor: pointer;"
-                        {'' if current_page < total_pages else 'disabled'}>+</button>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-            # Update session state for buttons
-            if st.button("", key=f"prev_{category}"):
-                if current_page > 1:
-                    st.session_state[f"page_{category}"] -= 1
-            if st.button("", key=f"next_{category}"):
-                if current_page < total_pages:
-                    st.session_state[f"page_{category}"] += 1
+            # Add clickable pagination buttons
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col1:
+                if st.button("➖", key=f"prev_{category}"):
+                    if current_page > 1:
+                        st.session_state[f"page_{category}"] -= 1
+            with col3:
+                if st.button("➕", key=f"next_{category}"):
+                    if current_page < total_pages:
+                        st.session_state[f"page_{category}"] += 1
+            with col2:
+                st.markdown(
+                    f"<div style='text-align: center; font-size: 12px;'>Halaman {current_page}/{total_pages}</div>",
+                    unsafe_allow_html=True,
+                )
