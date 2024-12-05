@@ -77,12 +77,12 @@ for i, (category, color) in enumerate(categories.items()):
             col1, col2, col3 = st.columns([1, 2, 1])
 
             with col1:
-                if st.button("➖", key=f"prev_{category}", help="Halaman Sebelumnya"):
+                if st.button("➖", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=False):
                     if current_page > 1:
                         st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
             with col3:
-                if st.button("➕", key=f"next_{category}", help="Halaman Berikutnya"):
+                if st.button("➕", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=False):
                     if current_page < total_pages:
                         st.session_state[f"page_{category}"] += 1  # Go to next page
 
@@ -91,3 +91,24 @@ for i, (category, color) in enumerate(categories.items()):
                     f"<div style='text-align: center; font-size: 12px;'>Halaman {current_page}/{total_pages}</div>",
                     unsafe_allow_html=True,
                 )
+
+            # Add CSS to adjust button size
+            st.markdown(
+                """
+                <style>
+                    .streamlit-expanderHeader {
+                        font-size: 12px;
+                    }
+                    .stButton > button {
+                        font-size: 12px;
+                        height: 25px;
+                        width: 25px;
+                        padding: 0;
+                        border-radius: 50%;
+                        border: 1px solid #ccc;
+                        background-color: #f9f9f9;
+                    }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
