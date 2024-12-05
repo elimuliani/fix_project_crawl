@@ -73,17 +73,17 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Add pagination controls inside a row
-            pagination_row = st.container()
-            with pagination_row:
+            # If there are multiple pages, display navigation
+            if total_pages > 1:
                 col1, col2 = st.columns([1, 1])
+
                 with col1:
-                    if st.button("Sebelumnya", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
+                    if st.button("← Sebelumnya", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
                         if current_page > 1:
                             st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
                 with col2:
-                    if st.button("Berikutnya", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
+                    if st.button("Berikutnya →", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
                         if current_page < total_pages:
                             st.session_state[f"page_{category}"] += 1  # Go to next page
 
@@ -100,10 +100,11 @@ st.markdown(
         .stButton > button {
             font-size: 12px;
             height: 30px;
-            padding: 0 10px;
+            padding: 0 12px;
             border-radius: 5px;
             border: 1px solid #ccc;
             background-color: #f1f1f1;
+            margin-top: 5px;
         }
         .stButton > button:hover {
             background-color: #e0e0e0;
