@@ -118,21 +118,52 @@ import plotly.express as px
 # Menghitung jumlah berita per kategori sesuai urutan PESTEL
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
+# Menghitung jumlah berita per kategori sesuai urutan PESTEL
+category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
+
 # Membuat pie chart
- # Pie Chart Interaktif untuk PESTEL
-    st.write("Pie Chart Berita (PESTEL):")
-    pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order, fill_value=0).reset_index()
-    pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
-    fig_pie = px.pie(
-        pestel_counts,
-        names='PESTEL_Category',
-        values='Jumlah',
-        color='PESTEL_Category',
-        category_orders={'PESTEL_Category': pestel_order},
-        color_discrete_sequence=px.colors.qualitative.Set3,
-        title="Distribusi Berita PESTEL"
-    )
-    st.plotly_chart(fig_pie)
+fig = px.pie(
+    names=categories_order,  # Sesuai urutan PESTEL
+    values=category_counts,  # Nilai jumlah berita
+    color=categories_order,  # Warna sesuai kategori
+    title="Distribusi Kategori Berita (PESTEL)",
+    hole=0.3,  # Membuat donut chart
+    color_discrete_map={
+        "Politik": "#FFD700",   # Kuning
+        "Ekonomi": "#32CD32",   # Hijau
+        "Sosial": "#1E90FF",    # Biru
+        "Teknologi": "#8A2BE2", # Ungu
+        "Lingkungan": "#FF6347",# Merah
+        "Legal": "#FF4500",     # Jingga
+    }
+)
+
+# Mengatur tata letak agar lebih jelas
+fig.update_traces(
+    hoverinfo="label+percent",
+    textinfo="label+value",
+    pull=[0.1 if value > 0 else 0 for value in category_counts]
+)
+
+fig.update_layout(
+    showlegend=True,
+    legend_title="Kategori",
+    legend=dict(
+        orientation="h",  # Horizontal
+        yanchor="bottom",
+        y=-0.2,  # Menempatkan legenda di bawah chart
+        xanchor="center",
+        x=0.5
+    ),
+    margin=dict(t=40, b=40, l=40, r=40),  # Margin agar lebih jelas
+    height=500,  # Tinggi chart
+    title_x=0.5,  # Judul di tengah
+    title_font=dict(size=16),
+)
+
+# Menampilkan pie chart
+st.plotly_chart(fig)
+
 
 
 # Mengatur tata letak agar lebih jelas
