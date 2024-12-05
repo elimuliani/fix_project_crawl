@@ -53,9 +53,11 @@ items_per_page = 5  # Number of items per page
 for i, category in enumerate(categories_order):
     with cols[i]:
         color = categories[category]
-        st.markdown(f"<div style='background-color: {color}; padding: 10px; border-radius: 10px;'>"
-                    f"<h4 style='text-align: center; color: white;'>{category}</h4>"
-                    f"</div>", unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
+            <h4 style='text-align: center; color: white;'>{category}</h4>
+        </div>
+        """, unsafe_allow_html=True)
 
         # Filter news for the current category
         category_data = data[data["category"] == category]
@@ -76,12 +78,17 @@ for i, category in enumerate(categories_order):
             end_idx = start_idx + items_per_page
             page_data = category_data.iloc[start_idx:end_idx]
 
-            # Display paginated headlines
+            # Display paginated headlines as cards
             for _, row in page_data.iterrows():
                 headline = row["headline"]
                 link = row["link"]
-                # Display clickable headline
-                st.markdown(f"- [{headline}]({link})")
+                st.markdown(f"""
+                <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                    <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
+                        <h5>{headline}</h5>
+                    </a>
+                </div>
+                """, unsafe_allow_html=True)
 
             # Update the category count based on the number of items displayed on this page
             category_counts[category] += len(page_data)
@@ -112,29 +119,33 @@ category_counts_sorted = {category: category_counts[category] for category in ca
 # Create and display the interactive pie chart showing the percentage of news per category
 # Prepare the data for the pie chart
 fig = px.pie(
-    names=list(category_counts_sorted.keys()),
-    values=list(category_counts_sorted.values()),
-    color=list(category_counts_sorted.keys()),
+    names=categories_order,  # Correct order
+    values=[category_counts[category] for category in categories_order],
+    color=categories_order,
     color_discrete_map=categories,
     title="Distribusi Kategori Berita",
     hole=0.3,  # Donut chart for better visibility
-    labels=list(category_counts_sorted.keys())
 )
 
-# Update layout for better readability and remove any unnecessary borders
+# Update layout for better readability and interactivity
+fig.update_traces(
+    hoverinfo="label+percent",
+    textinfo="value",
+    pull=[0.1 if value > 0 else 0 for value in list(category_counts_sorted.values())]
+)
 fig.update_layout(
     showlegend=True,
     legend_title="Kategori",
-    margin=dict(t=0, b=0, l=0, r=0),  # Remove margins for a clean chart
-    height=400,  # Adjust height for compactness
-    title_x=0.5,  # Center the title
-    clickmode="event+select",  # Enable clicking on segments
+    margin=dict(t=0, b=0, l=0, r=0),
+    height=400,
+    title_x=0.5,
+    clickmode="event+select",
 )
 
 # Display the interactive pie chart in Streamlit
 st.plotly_chart(fig)
 
-# CSS for button layout and chart refinement
+# CSS for better layout
 st.markdown(
     """
     <style>
@@ -150,7 +161,7 @@ st.markdown(
         .stButton > button:hover {
             background-color: #e0e0e0;
         }
-        .stColumn {
+        .category-header {
             margin-bottom: 10px;
         }
         .stContainer {
