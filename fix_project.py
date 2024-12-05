@@ -115,30 +115,27 @@ for i, category in enumerate(categories_order):
 
 import plotly.express as px
 
-# Define the PESTEL categories in the correct order
-categories_order = ["Politik", "Ekonomi", "Sosial", "Teknologi", "Lingkungan", "Legal"]
-
-# Calculate the counts for each category in the desired order
+# Sort category counts by the correct PESTEL order
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
-# Create the pie chart
+# Create and display the pie chart
 fig = px.pie(
-    names=categories_order,
-    values=category_counts,
+    names=categories_order,  # Correct order of categories
+    values=category_counts,  # Values aligned with the correct order
     color=categories_order,
-    title="Distribusi Kategori Berita (PESTEL)",
-    hole=0.3,  # Donut chart
     color_discrete_map={
-        "Politik": "#FFD700",
-        "Ekonomi": "#32CD32",
-        "Sosial": "#1E90FF",
-        "Teknologi": "#8A2BE2",
-        "Lingkungan": "#FF6347",
-        "Legal": "#FF4500"
-    }
+        "Politik": "#FFD700",   # Yellow
+        "Ekonomi": "#32CD32",   # Green
+        "Sosial": "#1E90FF",    # Blue
+        "Teknologi": "#8A2BE2", # Purple
+        "Lingkungan": "#FF6347",# Red
+        "Legal": "#FF4500",     # Orange
+    },
+    title="Distribusi Kategori Berita (PESTEL)",
+    hole=0.3,  # Donut chart for better visualization
 )
 
-# Update layout for better readability
+# Enhance interactivity and appearance
 fig.update_traces(
     hoverinfo="label+percent",
     textinfo="label+value",
@@ -150,9 +147,11 @@ fig.update_layout(
     margin=dict(t=10, b=10, l=10, r=10),
     height=400,
     title_x=0.5,
-    title_font=dict(size=16)
+    title_font=dict(size=16),
 )
 
-fig.show()
+# Display the pie chart
+st.plotly_chart(fig)
+
 
 
