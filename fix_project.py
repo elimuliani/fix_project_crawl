@@ -49,7 +49,6 @@ category_counts = {category: 0 for category in categories_order}
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
 
-# Display the category headlines and their data
 for i, category in enumerate(categories_order):
     with cols[i]:
         color = categories[category]
@@ -106,57 +105,31 @@ for i, category in enumerate(categories_order):
                     unsafe_allow_html=True,
                 )
 
-# Sort category counts by the correct PESTEL order
-category_counts_sorted = {category: category_counts[category] for category in categories_order}
-
 # Create and display the interactive pie chart showing the percentage of news per category
-# Prepare the data for the pie chart
+# Ensure categories are in the correct order
+sorted_category_counts = {category: category_counts[category] for category in categories_order}
+
 fig = px.pie(
-    names=list(category_counts_sorted.keys()),
-    values=list(category_counts_sorted.values()),
-    color=list(category_counts_sorted.keys()),
+    names=list(sorted_category_counts.keys()),
+    values=list(sorted_category_counts.values()),
+    color=list(sorted_category_counts.keys()),
     color_discrete_map=categories,
     title="Distribusi Kategori Berita",
     hole=0.3,  # Donut chart for better visibility
-    labels=list(category_counts_sorted.keys())
 )
 
-# Update layout for better readability and remove any unnecessary borders
+# Update layout for better readability
 fig.update_layout(
-    showlegend=True,
     legend_title="Kategori",
-    margin=dict(t=0, b=0, l=0, r=0),  # Remove margins for a clean chart
-    height=400,  # Adjust height for compactness
+    margin=dict(t=20, b=10, l=10, r=10),  # Reduce unnecessary margin
+    height=350,  # Adjust height for compactness
     title_x=0.5,  # Center the title
     clickmode="event+select",  # Enable clicking on segments
 )
 
-# Display the interactive pie chart in Streamlit
-st.plotly_chart(fig)
-
-# CSS for button layout and chart refinement
-st.markdown(
-    """
-    <style>
-        .stButton > button {
-            font-size: 8px;  /* Smaller font size */
-            height: 20px;    /* Smaller height */
-            width: 20px;     /* Smaller width */
-            padding: 0;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
-        .stButton > button:hover {
-            background-color: #e0e0e0;
-        }
-        .stColumn {
-            margin-bottom: 10px;
-        }
-        .stContainer {
-            margin-top: 10px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Add interactivity for clicking the chart
+selected_category = st.plotly_chart(fig, use_container_width=True)
+if selected_category:
+    clicked_category = selected_category.get("points", [{}])[0].get("label")
+    if clicked_category in st.session_state:
+        st.session_state[f"page_{clicked_category}"] = 1  # Reset page to 1 for clicked category
