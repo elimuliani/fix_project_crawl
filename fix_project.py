@@ -99,8 +99,8 @@ st.markdown(
     <style>
         .stButton > button {
             font-size: 10px;
-            height: 25px;
-            width: 25px;
+            height: 10px;
+            width: 10px;
             padding: 0;
             border-radius: 50%;
             border: 1px solid #ccc;
