@@ -80,8 +80,7 @@ for i, (category, color) in enumerate(categories.items()):
                     "➖", 
                     key=f"prev_{category}", 
                     help="Halaman Sebelumnya", 
-                    use_container_width=False,
-                    on_click=lambda: st.session_state[f"page_{category}"] -= 1 if current_page > 1 else 0
+                    use_container_width=False
                 ):
                     if current_page > 1:
                         st.session_state[f"page_{category}"] -= 1
@@ -91,8 +90,7 @@ for i, (category, color) in enumerate(categories.items()):
                     "➕", 
                     key=f"next_{category}", 
                     help="Halaman Berikutnya", 
-                    use_container_width=False,
-                    on_click=lambda: st.session_state[f"page_{category}"] += 1 if current_page < total_pages else 0
+                    use_container_width=False
                 ):
                     if current_page < total_pages:
                         st.session_state[f"page_{category}"] += 1
@@ -102,4 +100,3 @@ for i, (category, color) in enumerate(categories.items()):
                     f"<div style='text-align: center; font-size: 12px;'>Halaman {current_page}/{total_pages}</div>",
                     unsafe_allow_html=True,
                 )
-
