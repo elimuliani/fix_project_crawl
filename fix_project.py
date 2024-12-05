@@ -40,26 +40,18 @@ categories = {
     "Legal": "#FF4500",  # Orange
 }
 
-# Sidebar dropdown for filtering categories
-selected_pestel_category = st.sidebar.selectbox(
-    "Pilih Kategori PESTEL untuk Fokus:",
-    options=["Semua"] + categories_order,
-)
-
-# Calculate category counts
-category_counts = data["category"].value_counts().reindex(categories_order, fill_value=0)
-
 # Streamlit columns for categories
 cols = st.columns(len(categories))
+
+# Dictionary to store the count of news for each category
+category_counts = {category: 0 for category in categories_order}
 
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
 
+# Display the category headlines and their data
 for i, category in enumerate(categories_order):
-    if selected_pestel_category != "Semua" and selected_pestel_category != category:
-        continue  # Skip rendering this category if it does not match the selected category
-
-    with cols[i % len(cols)]:
+    with cols[i]:
         color = categories[category]
         st.markdown(f"<div style='background-color: {color}; padding: 10px; border-radius: 10px;'>"
                     f"<h4 style='text-align: center; color: white;'>{category}</h4>"
@@ -91,6 +83,9 @@ for i, category in enumerate(categories_order):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
+            # Update the category count based on the number of items displayed on this page
+            category_counts[category] += len(page_data)
+
             # If there are multiple pages, display navigation
             if total_pages > 1:
                 col1, col2 = st.columns([1, 1])
@@ -111,23 +106,57 @@ for i, category in enumerate(categories_order):
                     unsafe_allow_html=True,
                 )
 
+# Sort category counts by the correct PESTEL order
+category_counts_sorted = {category: category_counts[category] for category in categories_order}
+
 # Create and display the interactive pie chart showing the percentage of news per category
+# Prepare the data for the pie chart
 fig = px.pie(
-    names=categories_order,
-    values=category_counts.values,
-    color=categories_order,
+    names=list(category_counts_sorted.keys()),
+    values=list(category_counts_sorted.values()),
+    color=list(category_counts_sorted.keys()),
     color_discrete_map=categories,
     title="Distribusi Kategori Berita",
     hole=0.3,  # Donut chart for better visibility
+    labels=list(category_counts_sorted.keys())
 )
 
-# Update layout for better readability
+# Update layout for better readability and remove any unnecessary borders
 fig.update_layout(
+    showlegend=True,
     legend_title="Kategori",
-    margin=dict(t=20, b=10, l=10, r=10),  # Reduce unnecessary margin
-    height=350,  # Adjust height for compactness
+    margin=dict(t=0, b=0, l=0, r=0),  # Remove margins for a clean chart
+    height=400,  # Adjust height for compactness
     title_x=0.5,  # Center the title
+    clickmode="event+select",  # Enable clicking on segments
 )
 
-# Display the interactive pie chart
-st.plotly_chart(fig, use_container_width=True)
+# Display the interactive pie chart in Streamlit
+st.plotly_chart(fig)
+
+# CSS for button layout and chart refinement
+st.markdown(
+    """
+    <style>
+        .stButton > button {
+            font-size: 8px;  /* Smaller font size */
+            height: 20px;    /* Smaller height */
+            width: 20px;     /* Smaller width */
+            padding: 0;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        .stButton > button:hover {
+            background-color: #e0e0e0;
+        }
+        .stColumn {
+            margin-bottom: 10px;
+        }
+        .stContainer {
+            margin-top: 10px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
