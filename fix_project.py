@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Set page configuration
 st.set_page_config(
@@ -38,6 +39,9 @@ categories = {
 # Streamlit columns for categories
 cols = st.columns(len(categories))
 
+# Dictionary to store the count of news for each category
+category_counts = {category: 0 for category in categories}
+
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
 
@@ -73,6 +77,9 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
+            # Update the category count based on the number of items displayed on this page
+            category_counts[category] += len(page_data)
+
             # If there are multiple pages, display navigation
             if total_pages > 1:
                 col1, col2 = st.columns([1, 1])
@@ -89,18 +96,31 @@ for i, (category, color) in enumerate(categories.items()):
 
                 # Display the current page number
                 st.markdown(
-                    f"<div style='text-align: center; font-size: 12px; color: gray;'>Halaman {current_page}/{total_pages}</div>",
+                    f"<div style='text-align: center; font-size: 10px; color: gray;'>Halaman {current_page}/{total_pages}</div>",
                     unsafe_allow_html=True,
                 )
+
+# Create and display the pie chart showing the percentage of news per category
+# Prepare the data for the pie chart
+category_labels = list(category_counts.keys())
+category_values = list(category_counts.values())
+
+# Plotting the pie chart
+fig, ax = plt.subplots()
+ax.pie(category_values, labels=category_labels, autopct='%1.1f%%', colors=[categories[cat] for cat in category_labels], startangle=90, wedgeprops={'edgecolor': 'black'})
+ax.axis('equal')  # Equal aspect ratio ensures that pie chart is drawn as a circle.
+
+# Display the pie chart in Streamlit
+st.pyplot(fig)
 
 # Add CSS to adjust button size and layout for a compact design
 st.markdown(
     """
     <style>
         .stButton > button {
-            font-size: 10px;
-            height: 10px;
-            width: 10px;
+            font-size: 8px;  /* Smaller font size */
+            height: 20px;    /* Smaller height */
+            width: 20px;     /* Smaller width */
             padding: 0;
             border-radius: 50%;
             border: 1px solid #ccc;
@@ -110,10 +130,10 @@ st.markdown(
             background-color: #e0e0e0;
         }
         .stColumn {
-            margin-bottom: 4px;
+            margin-bottom: 10px;
         }
         .stContainer {
-            margin-top: 3px;
+            margin-top: 10px;
         }
     </style>
     """,
