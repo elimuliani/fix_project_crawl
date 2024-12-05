@@ -73,16 +73,36 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Display simplified navigation buttons
+            # Display simplified and smaller navigation buttons
             col1, col2, col3 = st.columns([1, 1, 1])
             with col1:
-                if st.button("➖", key=f"prev_{category}"):
-                    if current_page > 1:
-                        st.session_state[f"page_{category}"] -= 1
+                st.markdown(
+                    f"""
+                    <button style="
+                        font-size: 14px;
+                        padding: 5px 10px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        background-color: #f9f9f9;
+                        cursor: pointer;"
+                        onclick="document.getElementById('prev_{category}').click();">➖</button>
+                    """,
+                    unsafe_allow_html=True
+                )
             with col3:
-                if st.button("➕", key=f"next_{category}"):
-                    if current_page < total_pages:
-                        st.session_state[f"page_{category}"] += 1
+                st.markdown(
+                    f"""
+                    <button style="
+                        font-size: 14px;
+                        padding: 5px 10px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        background-color: #f9f9f9;
+                        cursor: pointer;"
+                        onclick="document.getElementById('next_{category}').click();">➕</button>
+                    """,
+                    unsafe_allow_html=True
+                )
 
             # Show page information
             st.markdown(f"<p style='text-align: center;'>Halaman {current_page}/{total_pages}</p>", unsafe_allow_html=True)
