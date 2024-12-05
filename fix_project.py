@@ -26,7 +26,11 @@ if not required_columns.issubset(data.columns):
     st.error(f"File CSV harus memiliki kolom: {required_columns}")
     st.stop()
 
-# Group data by PESTEL categories
+# PESTEL categories in correct order
+categories_order = [
+    "Politik", "Ekonomi", "Sosial", "Teknologi", "Lingkungan", "Legal"
+]
+
 categories = {
     "Politik": "#FFD700",  # Yellow
     "Ekonomi": "#32CD32",  # Green
@@ -45,8 +49,10 @@ category_counts = {category: 0 for category in categories}
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
 
-for i, (category, color) in enumerate(categories.items()):
+# Display the category headlines and their data
+for i, category in enumerate(categories_order):
     with cols[i]:
+        color = categories[category]
         st.markdown(f"<div style='background-color: {color}; padding: 10px; border-radius: 10px;'>"
                     f"<h4 style='text-align: center; color: white;'>{category}</h4>"
                     f"</div>", unsafe_allow_html=True)
@@ -123,12 +129,13 @@ fig.update_layout(
     margin=dict(t=0, b=0, l=0, r=0),  # Remove margins
     height=400,  # Adjust height for compactness
     title_x=0.5,  # Center the title
+    clickmode="event+select",  # Enable clicking on segments
 )
 
 # Display the interactive pie chart in Streamlit
 st.plotly_chart(fig)
 
-# Add CSS to adjust button size and layout for a compact design
+# CSS for button layout and chart refinement
 st.markdown(
     """
     <style>
