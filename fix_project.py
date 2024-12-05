@@ -73,36 +73,28 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Display simplified and smaller navigation buttons
-            col1, col2, col3 = st.columns([1, 1, 1])
-            with col1:
-                st.markdown(
-                    f"""
+            # Display smaller navigation buttons
+            st.markdown(
+                f"""
+                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
                     <button style="
-                        font-size: 14px;
-                        padding: 5px 10px;
+                        font-size: 10px;
+                        padding: 2px 5px;
                         border: 1px solid #ccc;
-                        border-radius: 5px;
+                        border-radius: 3px;
                         background-color: #f9f9f9;
                         cursor: pointer;"
                         onclick="document.getElementById('prev_{category}').click();">➖</button>
-                    """,
-                    unsafe_allow_html=True
-                )
-            with col3:
-                st.markdown(
-                    f"""
+                    <span style="font-size: 10px; text-align: center;">Halaman {current_page}/{total_pages}</span>
                     <button style="
-                        font-size: 14px;
-                        padding: 5px 10px;
+                        font-size: 10px;
+                        padding: 2px 5px;
                         border: 1px solid #ccc;
-                        border-radius: 5px;
+                        border-radius: 3px;
                         background-color: #f9f9f9;
                         cursor: pointer;"
                         onclick="document.getElementById('next_{category}').click();">➕</button>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-            # Show page information
-            st.markdown(f"<p style='text-align: center;'>Halaman {current_page}/{total_pages}</p>", unsafe_allow_html=True)
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
