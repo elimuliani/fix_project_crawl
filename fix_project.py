@@ -73,14 +73,16 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Add clickable pagination buttons
+            # Add clickable pagination buttons with smaller size
             col1, col2, col3 = st.columns([1, 2, 1])
             with col1:
-                if st.button("➖", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=False):
+                if st.button("➖", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=False,
+                             args=(), key_prefix="prev_", label_visibility="collapsed"):
                     if current_page > 1:
                         st.session_state[f"page_{category}"] -= 1
             with col3:
-                if st.button("➕", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=False):
+                if st.button("➕", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=False,
+                             args=(), key_prefix="next_", label_visibility="collapsed"):
                     if current_page < total_pages:
                         st.session_state[f"page_{category}"] += 1
             with col2:
