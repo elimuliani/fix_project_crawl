@@ -53,19 +53,16 @@ for i, (category, color) in enumerate(categories.items()):
         if category_data.empty:
             st.write("Tidak ada berita.")
         else:
-            # Pagination logic
+            # Session state for current page
+            if f"page_{category}" not in st.session_state:
+                st.session_state[f"page_{category}"] = 1
+
+            # Calculate pagination
             total_items = len(category_data)
             total_pages = (total_items - 1) // items_per_page + 1
-            page = st.number_input(
-                f"Halaman untuk {category}",
-                min_value=1,
-                max_value=total_pages,
-                value=1,
-                step=1,
-                key=f"page_{category}"
-            )
+            current_page = st.session_state[f"page_{category}"]
 
-            start_idx = (page - 1) * items_per_page
+            start_idx = (current_page - 1) * items_per_page
             end_idx = start_idx + items_per_page
             page_data = category_data.iloc[start_idx:end_idx]
 
@@ -76,5 +73,16 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
+            # Display navigation buttons
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col1:
+                if st.button("Previous", key=f"prev_{category}"):
+                    if current_page > 1:
+                        st.session_state[f"page_{category}"] -= 1
+            with col3:
+                if st.button("Next", key=f"next_{category}"):
+                    if current_page < total_pages:
+                        st.session_state[f"page_{category}"] += 1
+
             # Show page information
-            st.write(f"Halaman {page} dari {total_pages}")
+            st.write(f"Halaman {current_page} dari {total_pages}")
