@@ -117,57 +117,30 @@ for i, category in enumerate(categories_order):
 category_counts_sorted = {category: category_counts[category] for category in categories_order}
 
 # Create and display the interactive pie chart showing the percentage of news per category
-# Prepare the data for the pie chart
 fig = px.pie(
     names=categories_order,  # Correct order
     values=[category_counts[category] for category in categories_order],
     color=categories_order,
     color_discrete_map=categories,
     title="Distribusi Kategori Berita",
-    hole=0.3,  # Donut chart for better visibility
+    hole=0.3  # Donut chart for better visibility
 )
 
 # Update layout for better readability and interactivity
 fig.update_traces(
     hoverinfo="label+percent",
-    textinfo="value",
-    pull=[0.1 if value > 0 else 0 for value in list(category_counts_sorted.values())]
+    textinfo="label+value",
+    pull=[0.1 if category_counts[category] > 0 else 0 for category in categories_order]
 )
 fig.update_layout(
     showlegend=True,
     legend_title="Kategori",
-    margin=dict(t=0, b=0, l=0, r=0),
+    margin=dict(t=10, b=10, l=10, r=10),
     height=400,
     title_x=0.5,
-    clickmode="event+select",
+    title_font=dict(size=16),
 )
 
 # Display the interactive pie chart in Streamlit
 st.plotly_chart(fig)
 
-# CSS for better layout
-st.markdown(
-    """
-    <style>
-        .stButton > button {
-            font-size: 8px;  /* Smaller font size */
-            height: 20px;    /* Smaller height */
-            width: 20px;     /* Smaller width */
-            padding: 0;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
-        .stButton > button:hover {
-            background-color: #e0e0e0;
-        }
-        .category-header {
-            margin-bottom: 10px;
-        }
-        .stContainer {
-            margin-top: 10px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
