@@ -113,24 +113,36 @@ for i, category in enumerate(categories_order):
                     unsafe_allow_html=True,
                 )
 
-# Sort category counts by the correct PESTEL order
-category_counts_sorted = {category: category_counts[category] for category in categories_order}
+import plotly.express as px
 
-# Create and display the interactive pie chart showing the percentage of news per category
+# Define the PESTEL categories in the correct order
+categories_order = ["Politik", "Ekonomi", "Sosial", "Teknologi", "Lingkungan", "Legal"]
+
+# Calculate the counts for each category in the desired order
+category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
+
+# Create the pie chart
 fig = px.pie(
-    names=categories_order,  # Correct order
-    values=[category_counts[category] for category in categories_order],
+    names=categories_order,
+    values=category_counts,
     color=categories_order,
-    color_discrete_map=categories,
-    title="Distribusi Kategori Berita",
-    hole=0.3  # Donut chart for better visibility
+    title="Distribusi Kategori Berita (PESTEL)",
+    hole=0.3,  # Donut chart
+    color_discrete_map={
+        "Politik": "#FFD700",
+        "Ekonomi": "#32CD32",
+        "Sosial": "#1E90FF",
+        "Teknologi": "#8A2BE2",
+        "Lingkungan": "#FF6347",
+        "Legal": "#FF4500"
+    }
 )
 
-# Update layout for better readability and interactivity
+# Update layout for better readability
 fig.update_traces(
     hoverinfo="label+percent",
     textinfo="label+value",
-    pull=[0.1 if category_counts[category] > 0 else 0 for category in categories_order]
+    pull=[0.1 if value > 0 else 0 for value in category_counts]
 )
 fig.update_layout(
     showlegend=True,
@@ -138,9 +150,9 @@ fig.update_layout(
     margin=dict(t=10, b=10, l=10, r=10),
     height=400,
     title_x=0.5,
-    title_font=dict(size=16),
+    title_font=dict(size=16)
 )
 
-# Display the interactive pie chart in Streamlit
-st.plotly_chart(fig)
+fig.show()
+
 
