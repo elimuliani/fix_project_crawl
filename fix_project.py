@@ -44,7 +44,7 @@ categories = {
 cols = st.columns(len(categories))
 
 # Dictionary to store the count of news for each category
-category_counts = {category: 0 for category in categories}
+category_counts = {category: 0 for category in categories_order}
 
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
@@ -106,15 +106,11 @@ for i, category in enumerate(categories_order):
                     unsafe_allow_html=True,
                 )
 
+# Sort category counts by the correct PESTEL order
+category_counts_sorted = {category: category_counts[category] for category in categories_order}
+
 # Create and display the interactive pie chart showing the percentage of news per category
 # Prepare the data for the pie chart
-category_labels = list(category_counts.keys())
-category_values = list(category_counts.values())
-
-# Sort the categories by PESTEL order
-category_counts_sorted = {key: category_counts[key] for key in categories_order}
-
-# Plotting the pie chart using Plotly
 fig = px.pie(
     names=list(category_counts_sorted.keys()),
     values=list(category_counts_sorted.values()),
