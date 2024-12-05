@@ -40,17 +40,17 @@ categories = {
     "Legal": "#FF4500",  # Orange
 }
 
-# Streamlit columns for categories
-cols = st.columns(len(categories))
-
-# Dictionary to store the count of news for each category
-category_counts = {category: 0 for category in categories_order}
-
-# Dropdown untuk memilih kategori dari pie chart
+# Sidebar dropdown for filtering categories
 selected_pestel_category = st.sidebar.selectbox(
     "Pilih Kategori PESTEL untuk Fokus:",
     options=["Semua"] + categories_order,
 )
+
+# Calculate category counts
+category_counts = data["category"].value_counts().reindex(categories_order, fill_value=0)
+
+# Streamlit columns for categories
+cols = st.columns(len(categories))
 
 # Display each category and its clickable headlines with pagination
 items_per_page = 5  # Number of items per page
@@ -112,13 +112,10 @@ for i, category in enumerate(categories_order):
                 )
 
 # Create and display the interactive pie chart showing the percentage of news per category
-# Ensure categories are in the correct order
-sorted_category_counts = {category: category_counts[category] for category in categories_order}
-
 fig = px.pie(
-    names=list(sorted_category_counts.keys()),
-    values=list(sorted_category_counts.values()),
-    color=list(sorted_category_counts.keys()),
+    names=categories_order,
+    values=category_counts.values,
+    color=categories_order,
     color_discrete_map=categories,
     title="Distribusi Kategori Berita",
     hole=0.3,  # Donut chart for better visibility
