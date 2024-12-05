@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 
@@ -39,7 +38,9 @@ categories = {
 # Streamlit columns for categories
 cols = st.columns(len(categories))
 
-# Display each category and its clickable headlines
+# Display each category and its clickable headlines with pagination
+items_per_page = 5  # Number of items per page
+
 for i, (category, color) in enumerate(categories.items()):
     with cols[i]:
         st.markdown(f"<div style='background-color: {color}; padding: 5px; border-radius: 10px;'>"
@@ -52,9 +53,28 @@ for i, (category, color) in enumerate(categories.items()):
         if category_data.empty:
             st.write("Tidak ada berita.")
         else:
-            for _, row in category_data.iterrows():
+            # Pagination logic
+            total_items = len(category_data)
+            total_pages = (total_items - 1) // items_per_page + 1
+            page = st.number_input(
+                f"Halaman untuk {category}",
+                min_value=1,
+                max_value=total_pages,
+                value=1,
+                step=1,
+                key=f"page_{category}"
+            )
+
+            start_idx = (page - 1) * items_per_page
+            end_idx = start_idx + items_per_page
+            page_data = category_data.iloc[start_idx:end_idx]
+
+            # Display paginated headlines
+            for _, row in page_data.iterrows():
                 headline = row["headline"]
                 link = row["link"]
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
+            # Show page information
+            st.write(f"Halaman {page} dari {total_pages}")
