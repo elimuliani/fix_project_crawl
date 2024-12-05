@@ -73,24 +73,23 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Add clickable pagination buttons with smaller size using Streamlit buttons
+            # Add clickable pagination buttons with smaller size using HTML
             col1, col2, col3 = st.columns([1, 2, 1])
+
             with col1:
-                if st.button(
-                    "➖", 
-                    key=f"prev_{category}", 
-                    help="Halaman Sebelumnya", 
-                    use_container_width=False
+                # HTML for smaller "previous" button
+                if st.markdown(
+                    "<button style='font-size: 12px; padding: 2px 6px;'>➖</button>", 
+                    unsafe_allow_html=True
                 ):
                     if current_page > 1:
                         st.session_state[f"page_{category}"] -= 1
 
             with col3:
-                if st.button(
-                    "➕", 
-                    key=f"next_{category}", 
-                    help="Halaman Berikutnya", 
-                    use_container_width=False
+                # HTML for smaller "next" button
+                if st.markdown(
+                    "<button style='font-size: 12px; padding: 2px 6px;'>➕</button>", 
+                    unsafe_allow_html=True
                 ):
                     if current_page < total_pages:
                         st.session_state[f"page_{category}"] += 1
