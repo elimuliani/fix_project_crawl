@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 # Set page configuration
 st.set_page_config(
@@ -100,18 +100,33 @@ for i, (category, color) in enumerate(categories.items()):
                     unsafe_allow_html=True,
                 )
 
-# Create and display the pie chart showing the percentage of news per category
+# Create and display the interactive pie chart showing the percentage of news per category
 # Prepare the data for the pie chart
 category_labels = list(category_counts.keys())
 category_values = list(category_counts.values())
 
-# Plotting the pie chart
-fig, ax = plt.subplots()
-ax.pie(category_values, labels=category_labels, autopct='%1.1f%%', colors=[categories[cat] for cat in category_labels], startangle=90, wedgeprops={'edgecolor': 'black'})
-ax.axis('equal')  # Equal aspect ratio ensures that pie chart is drawn as a circle.
+# Plotting the pie chart using Plotly
+fig = px.pie(
+    names=category_labels,
+    values=category_values,
+    color=category_labels,
+    color_discrete_map=categories,
+    title="Distribusi Kategori Berita",
+    hole=0.3,  # Donut chart for better visibility
+    labels=category_labels
+)
 
-# Display the pie chart in Streamlit
-st.pyplot(fig)
+# Update layout for better readability
+fig.update_layout(
+    showlegend=True,
+    legend_title="Kategori",
+    margin=dict(t=0, b=0, l=0, r=0),  # Remove margins
+    height=400,  # Adjust height for compactness
+    title_x=0.5,  # Center the title
+)
+
+# Display the interactive pie chart in Streamlit
+st.plotly_chart(fig)
 
 # Add CSS to adjust button size and layout for a compact design
 st.markdown(
