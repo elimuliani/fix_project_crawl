@@ -43,7 +43,7 @@ items_per_page = 5  # Number of items per page
 
 for i, (category, color) in enumerate(categories.items()):
     with cols[i]:
-        st.markdown(f"<div style='background-color: {color}; padding: 5px; border-radius: 10px;'>"
+        st.markdown(f"<div style='background-color: {color}; padding: 10px; border-radius: 10px;'>"
                     f"<h4 style='text-align: center; color: white;'>{category}</h4>"
                     f"</div>", unsafe_allow_html=True)
 
@@ -73,42 +73,44 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Add pagination controls with small buttons
-            col1, col2, col3 = st.columns([1, 2, 1])
+            # Add pagination controls with buttons
+            pagination_col1, pagination_col2 = st.columns([1, 1])
 
-            with col1:
-                if st.button("➖", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=False):
+            with pagination_col1:
+                if st.button("Sebelumnya", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
                     if current_page > 1:
                         st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
-            with col3:
-                if st.button("➕", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=False):
+            with pagination_col2:
+                if st.button("Berikutnya", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
                     if current_page < total_pages:
                         st.session_state[f"page_{category}"] += 1  # Go to next page
 
-            with col2:
-                st.markdown(
-                    f"<div style='text-align: center; font-size: 12px;'>Halaman {current_page}/{total_pages}</div>",
-                    unsafe_allow_html=True,
-                )
-
-            # Add CSS to adjust button size
+            # Display the current page number
             st.markdown(
-                """
-                <style>
-                    .streamlit-expanderHeader {
-                        font-size: 12px;
-                    }
-                    .stButton > button {
-                        font-size: 12px;
-                        height: 25px;
-                        width: 25px;
-                        padding: 0;
-                        border-radius: 50%;
-                        border: 1px solid #ccc;
-                        background-color: #f9f9f9;
-                    }
-                </style>
-                """,
-                unsafe_allow_html=True
+                f"<div style='text-align: center; font-size: 14px; color: gray;'>Halaman {current_page}/{total_pages}</div>",
+                unsafe_allow_html=True,
             )
+
+# Add CSS to adjust button size and layout
+st.markdown(
+    """
+    <style>
+        .stButton > button {
+            font-size: 14px;
+            height: 35px;
+            padding: 0 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        .stButton > button:hover {
+            background-color: #e0e0e0;
+        }
+        .stColumn {
+            margin-bottom: 20px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
