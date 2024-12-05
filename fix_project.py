@@ -73,24 +73,24 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Display smaller navigation buttons
+            # Center and align pagination buttons below the news
             st.markdown(
                 f"""
-                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
                     <button style="
-                        font-size: 10px;
-                        padding: 2px 5px;
+                        font-size: 12px;
+                        padding: 4px 8px;
                         border: 1px solid #ccc;
-                        border-radius: 3px;
+                        border-radius: 5px;
                         background-color: #f9f9f9;
                         cursor: pointer;"
                         onclick="document.getElementById('prev_{category}').click();">➖</button>
-                    <span style="font-size: 10px; text-align: center;">Halaman {current_page}/{total_pages}</span>
+                    <span style="margin: 0 10px; font-size: 12px;">Halaman {current_page}/{total_pages}</span>
                     <button style="
-                        font-size: 10px;
-                        padding: 2px 5px;
+                        font-size: 12px;
+                        padding: 4px 8px;
                         border: 1px solid #ccc;
-                        border-radius: 3px;
+                        border-radius: 5px;
                         background-color: #f9f9f9;
                         cursor: pointer;"
                         onclick="document.getElementById('next_{category}').click();">➕</button>
