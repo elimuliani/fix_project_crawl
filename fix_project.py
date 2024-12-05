@@ -113,11 +113,6 @@ for i, category in enumerate(categories_order):
                     unsafe_allow_html=True,
                 )
 
-import plotly.express as px
-
-# Menghitung jumlah berita per kategori sesuai urutan PESTEL
-category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
-
 # Menghitung jumlah berita per kategori sesuai urutan PESTEL
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
@@ -163,35 +158,3 @@ fig.update_layout(
 
 # Menampilkan pie chart
 st.plotly_chart(fig)
-
-
-
-# Mengatur tata letak agar lebih jelas
-fig.update_traces(
-    hoverinfo="label+percent",
-    textinfo="label+value",
-    pull=[0.1 if value > 0 else 0 for value in category_counts]
-)
-
-fig.update_layout(
-    showlegend=True,
-    legend_title="Kategori",
-    legend=dict(
-        orientation="h",  # Horizontal
-        yanchor="bottom",
-        y=-0.2,  # Menempatkan legenda di bawah chart
-        xanchor="center",
-        x=0.5
-    ),
-    margin=dict(t=40, b=40, l=40, r=40),  # Margin agar lebih jelas
-    height=500,  # Tinggi chart
-    title_x=0.5,  # Judul di tengah
-    title_font=dict(size=16),
-)
-
-# Menampilkan pie chart
-st.plotly_chart(fig)
-
-
-
-
