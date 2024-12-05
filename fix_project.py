@@ -123,7 +123,7 @@ fig = px.pie(
     names=categories_order,  # Sesuai urutan PESTEL
     values=category_counts,  # Nilai jumlah berita
     color=categories_order,  # Warna sesuai kategori
-    title="Distribusi Kategori Berita (PESTEL)",
+    title="Pie Chart Berita (PESTEL)",
     hole=0.3,  # Membuat donut chart
     color_discrete_map={
         "Politik": "#FFD700",   # Kuning
