@@ -110,10 +110,10 @@ st.markdown(
             background-color: #e0e0e0;
         }
         .stColumn {
-            margin-bottom: 10px;
+            margin-bottom: 4px;
         }
         .stContainer {
-            margin-top: 10px;
+            margin-top: 3px;
         }
     </style>
     """,
