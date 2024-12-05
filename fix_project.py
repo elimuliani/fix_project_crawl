@@ -73,28 +73,15 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Center and align pagination buttons below the news
-            st.markdown(
-                f"""
-                <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
-                    <button style="
-                        font-size: 12px;
-                        padding: 4px 8px;
-                        border: 1px solid #ccc;
-                        border-radius: 5px;
-                        background-color: #f9f9f9;
-                        cursor: pointer;"
-                        onclick="document.getElementById('prev_{category}').click();">➖</button>
-                    <span style="margin: 0 10px; font-size: 12px;">Halaman {current_page}/{total_pages}</span>
-                    <button style="
-                        font-size: 12px;
-                        padding: 4px 8px;
-                        border: 1px solid #ccc;
-                        border-radius: 5px;
-                        background-color: #f9f9f9;
-                        cursor: pointer;"
-                        onclick="document.getElementById('next_{category}').click();">➕</button>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            # Add pagination controls
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col1:
+                if st.button("➖", key=f"prev_{category}"):
+                    if current_page > 1:
+                        st.session_state[f"page_{category}"] -= 1
+            with col2:
+                st.write(f"Halaman {current_page}/{total_pages}")
+            with col3:
+                if st.button("➕", key=f"next_{category}"):
+                    if current_page < total_pages:
+                        st.session_state[f"page_{category}"] += 1
