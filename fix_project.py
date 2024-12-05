@@ -119,21 +119,21 @@ import plotly.express as px
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
 # Membuat pie chart
-fig = px.pie(
-    names=categories_order,  # Sesuai urutan PESTEL
-    values=category_counts,  # Nilai jumlah berita
-    color=categories_order,  # Warna sesuai kategori
-    title="Pie Chart Berita (PESTEL)",
-    hole=0.3,  # Membuat donut chart
-    color_discrete_map={
-        "Politik": "#FFD700",   # Kuning
-        "Ekonomi": "#32CD32",   # Hijau
-        "Sosial": "#1E90FF",    # Biru
-        "Teknologi": "#8A2BE2", # Ungu
-        "Lingkungan": "#FF6347",# Merah
-        "Legal": "#FF4500",     # Jingga
-    }
-)
+ # Pie Chart Interaktif untuk PESTEL
+    st.write("Pie Chart Berita (PESTEL):")
+    pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order, fill_value=0).reset_index()
+    pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
+    fig_pie = px.pie(
+        pestel_counts,
+        names='PESTEL_Category',
+        values='Jumlah',
+        color='PESTEL_Category',
+        category_orders={'PESTEL_Category': pestel_order},
+        color_discrete_sequence=px.colors.qualitative.Set3,
+        title="Distribusi Berita PESTEL"
+    )
+    st.plotly_chart(fig_pie)
+
 
 # Mengatur tata letak agar lebih jelas
 fig.update_traces(
