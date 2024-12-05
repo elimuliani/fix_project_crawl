@@ -111,22 +111,25 @@ for i, category in enumerate(categories_order):
 category_labels = list(category_counts.keys())
 category_values = list(category_counts.values())
 
+# Sort the categories by PESTEL order
+category_counts_sorted = {key: category_counts[key] for key in categories_order}
+
 # Plotting the pie chart using Plotly
 fig = px.pie(
-    names=category_labels,
-    values=category_values,
-    color=category_labels,
+    names=list(category_counts_sorted.keys()),
+    values=list(category_counts_sorted.values()),
+    color=list(category_counts_sorted.keys()),
     color_discrete_map=categories,
     title="Distribusi Kategori Berita",
     hole=0.3,  # Donut chart for better visibility
-    labels=category_labels
+    labels=list(category_counts_sorted.keys())
 )
 
-# Update layout for better readability
+# Update layout for better readability and remove any unnecessary borders
 fig.update_layout(
     showlegend=True,
     legend_title="Kategori",
-    margin=dict(t=0, b=0, l=0, r=0),  # Remove margins
+    margin=dict(t=0, b=0, l=0, r=0),  # Remove margins for a clean chart
     height=400,  # Adjust height for compactness
     title_x=0.5,  # Center the title
     clickmode="event+select",  # Enable clicking on segments
