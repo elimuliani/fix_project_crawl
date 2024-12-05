@@ -73,26 +73,26 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Add minimalistic pagination controls
+            # Add pagination controls
             st.markdown(
                 f"""
                 <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px;">
-                    <button onclick="window.location.reload()" style="
-                        font-size: 10px; 
-                        padding: 2px 6px; 
-                        margin-right: 10px; 
+                    <button onclick="document.location.reload()" style="
+                        font-size: 12px; 
+                        width: 30px; 
+                        height: 30px; 
                         border: 1px solid #ccc; 
-                        border-radius: 3px; 
+                        border-radius: 50%; 
                         background-color: #f9f9f9; 
                         cursor: pointer;"
                         {'' if current_page > 1 else 'disabled'}>-</button>
-                    <span style="margin: 0 5px; font-size: 12px;">Halaman {current_page}/{total_pages}</span>
-                    <button onclick="window.location.reload()" style="
-                        font-size: 10px; 
-                        padding: 2px 6px; 
-                        margin-left: 10px; 
+                    <span style="margin: 0 10px; font-size: 14px;">Halaman {current_page}/{total_pages}</span>
+                    <button onclick="document.location.reload()" style="
+                        font-size: 12px; 
+                        width: 30px; 
+                        height: 30px; 
                         border: 1px solid #ccc; 
-                        border-radius: 3px; 
+                        border-radius: 50%; 
                         background-color: #f9f9f9; 
                         cursor: pointer;"
                         {'' if current_page < total_pages else 'disabled'}>+</button>
