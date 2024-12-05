@@ -73,16 +73,16 @@ for i, (category, color) in enumerate(categories.items()):
                 # Display clickable headline
                 st.markdown(f"- [{headline}]({link})")
 
-            # Display navigation buttons
-            col1, col2, col3 = st.columns([1, 2, 1])
+            # Display simplified navigation buttons
+            col1, col2, col3 = st.columns([1, 1, 1])
             with col1:
-                if st.button("Previous", key=f"prev_{category}"):
+                if st.button("➖", key=f"prev_{category}"):
                     if current_page > 1:
                         st.session_state[f"page_{category}"] -= 1
             with col3:
-                if st.button("Next", key=f"next_{category}"):
+                if st.button("➕", key=f"next_{category}"):
                     if current_page < total_pages:
                         st.session_state[f"page_{category}"] += 1
 
             # Show page information
-            st.write(f"Halaman {current_page} dari {total_pages}")
+            st.markdown(f"<p style='text-align: center;'>Halaman {current_page}/{total_pages}</p>", unsafe_allow_html=True)
