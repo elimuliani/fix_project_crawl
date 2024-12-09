@@ -67,7 +67,7 @@ if uploaded_file:
         color='PESTEL_Category',
         category_orders={'PESTEL_Category': pestel_order},  # Urutkan sesuai PESTEL
         color_discrete_sequence=px.colors.qualitative.Set3,  # Warna menarik
-        title="Distribusi Berita PESTEL"
+        title="Pie Chart Berita PESTEL"
     )
     st.plotly_chart(fig_pie)
 
