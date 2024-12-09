@@ -12,7 +12,7 @@ st.set_page_config(
 st.title("📊 PESTEL Analysis Dashboard")
 
 # Load CSV file
-file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
+file_path = "/mnt/data/pln_clean_fix.csv"  # Replace with your CSV file path
 try:
     data = pd.read_csv(file_path)
     st.success("Data berhasil dimuat!")
@@ -21,7 +21,7 @@ except FileNotFoundError:
     st.stop()
 
 # Ensure the required columns exist
-required_columns = {"headline", "link", "category"}
+required_columns = {"headline", "link", "category", "sentiment"}
 if not required_columns.issubset(data.columns):
     st.error(f"File CSV harus memiliki kolom: {required_columns}")
     st.stop()
@@ -82,11 +82,15 @@ for i, category in enumerate(categories_order):
             for _, row in page_data.iterrows():
                 headline = row["headline"]
                 link = row["link"]
+                sentiment = row["sentiment"]
+                sentiment_color = "green" if sentiment == "Positif" else "gray"
+
                 st.markdown(f"""
                 <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
                         <h5>{headline}</h5>
                     </a>
+                    <p style="color: {sentiment_color};">Sentimen: {sentiment}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -116,13 +120,12 @@ for i, category in enumerate(categories_order):
 # Menghitung jumlah berita per kategori sesuai urutan PESTEL
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
-# Membuat pie chart
+# Membuat pie chart distribusi sentimen untuk setiap kategori
 fig = px.pie(
-    names=categories_order,  # Sesuai urutan PESTEL
-    values=category_counts,  # Nilai jumlah berita
-    color=categories_order,  # Warna sesuai kategori
-    title="Distribusi Kategori Berita (PESTEL)",
-    hole=0.3,  # Membuat donut chart
+    data,
+    names="category",
+    color="category",
+    hole=0.3,
     color_discrete_map={
         "Politik": "#FFD700",   # Kuning
         "Ekonomi": "#32CD32",   # Hijau
@@ -130,10 +133,11 @@ fig = px.pie(
         "Teknologi": "#8A2BE2", # Ungu
         "Lingkungan": "#FF6347",# Merah
         "Legal": "#FF4500",     # Jingga
-    }
+    },
+    title="Distribusi Kategori Berita (PESTEL)",
+    values="sentiment"  # Nilai jumlah berita per kategori per sentimen
 )
 
-# Mengatur tata letak agar lebih jelas
 fig.update_traces(
     hoverinfo="label+percent",
     textinfo="label+value",
@@ -158,3 +162,17 @@ fig.update_layout(
 
 # Menampilkan pie chart
 st.plotly_chart(fig)
+
+# Tambahkan chart distribusi sentimen
+sentiment_distribution = data.groupby(['category', 'sentiment']).size().reset_index(name='count')
+fig_sentiment = px.bar(
+    sentiment_distribution,
+    x='category',
+    y='count',
+    color='sentiment',
+    color_discrete_map={"Positif": "green", "Netral": "gray"},
+    title="Distribusi Sentimen per Kategori",
+    barmode='group'
+)
+
+st.plotly_chart(fig_sentiment)
