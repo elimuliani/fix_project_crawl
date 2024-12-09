@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # Title
-st.title("📊 PESTEL Analysis Dashboard")
+st.title("\ud83d\udcca PESTEL Analysis Dashboard")
 
 # Load CSV file
 file_path = "pln_clean_fix.csv"  # Replace with your CSV file path
@@ -102,12 +102,12 @@ for i, category in enumerate(categories_order):
                 col1, col2 = st.columns([1, 1])
 
                 with col1:
-                    if st.button("←", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
+                    if st.button("\u2190", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
                         if current_page > 1:
                             st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
                 with col2:
-                    if st.button("→", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
+                    if st.button("\u2192", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
                         if current_page < total_pages:
                             st.session_state[f"page_{category}"] += 1  # Go to next page
 
@@ -135,13 +135,11 @@ fig = px.pie(
         "Legal": "#FF4500",     # Jingga
     },
     title="Distribusi Kategori Berita (PESTEL)",
-    values="sentiment"  # Nilai jumlah berita per kategori per sentimen
 )
 
 fig.update_traces(
     hoverinfo="label+percent",
     textinfo="label+value",
-    pull=[0.1 if value > 0 else 0 for value in category_counts]
 )
 
 fig.update_layout(
