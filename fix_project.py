@@ -12,7 +12,7 @@ st.set_page_config(
 st.title("📊 PESTEL Analysis Dashboard")
 
 # Load CSV file
-file_path = "/mnt/data/pln_clean_fix.csv"  # Replace with your CSV file path
+file_path = "pln_clean_fix.csv"  # Replace with your CSV file path
 try:
     data = pd.read_csv(file_path)
     st.success("Data berhasil dimuat!")
