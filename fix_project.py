@@ -128,7 +128,7 @@ fig_pie = px.pie(
     color='PESTEL_Category',
     category_orders={'PESTEL_Category': categories_order},
     color_discrete_sequence=px.colors.qualitative.Set3,
-    title="Distribusi Berita berdasarkan Kategori PESTEL"
+    title="Pie Chart Berita PESTEL"
 )
 
 # Menampilkan pie chart dengan persentase
