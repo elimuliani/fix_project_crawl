@@ -1,149 +1,135 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
-from wordcloud import WordCloud
 
-# Judul aplikasi web
-st.title("Analisis PESTEL dan Sentimen Berita PLN")
+# Set page configuration
+st.set_page_config(
+    page_title="PESTEL Analysis Dashboard",
+    layout="wide",
+)
 
-# Membaca dataset dari file CSV
-uploaded_file = "data_with_sentiment_and_pestel.csv"
+# Title
+st.title("📊 PESTEL Analysis Dashboard")
 
-if uploaded_file:
-    # Membaca dataset
-    data = pd.read_csv(uploaded_file)
+# Load CSV file
+file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
+try:
+    data = pd.read_csv(file_path)
+    st.success("Data berhasil dimuat!")
+except FileNotFoundError:
+    st.error("File CSV tidak ditemukan. Pastikan file berada di path yang benar.")
+    st.stop()
 
-    # Memperbaiki penulisan salah ketik di kolom 'PESTEL_Category'
-    data['PESTEL_Category'] = data['PESTEL_Category'].replace({'Environtmental': 'Environmental'})
+# Ensure the required columns exist
+required_columns = {"headline", "link", "category"}
+if not required_columns.issubset(data.columns):
+    st.error(f"File CSV harus memiliki kolom: {required_columns}")
+    st.stop()
 
-    # Urutan kategori PESTEL
-    pestel_order = ['Political', 'Economic', 'Social', 'Technological', 'Environmental', 'Legal']
+# PESTEL categories in correct order
+categories_order = [
+    "Politik", "Ekonomi", "Sosial", "Teknologi", "Lingkungan", "Legal"
+]
 
-    # Tampilkan jumlah total data
-    total_data = len(data)
-    st.write(f"Total Jumlah Data: {total_data} baris")
+categories = {
+    "Politik": "#FFD700",  # Yellow
+    "Ekonomi": "#32CD32",  # Green
+    "Sosial": "#1E90FF",  # Blue
+    "Teknologi": "#8A2BE2",  # Purple
+    "Lingkungan": "#FF6347",  # Red
+    "Legal": "#FF4500",  # Orange
+}
 
-    # Tampilkan dataset
-    st.write("Tabel Data Analisis:")
-    st.dataframe(data)
+# Streamlit columns for categories
+cols = st.columns(len(categories))
 
-    # Tampilkan distribusi sentimen
-    st.write("Distribusi Sentimen:")
-    sentiment_counts = data['Sentiment'].value_counts()
-    fig, ax = plt.subplots()
-    sentiment_counts.plot(kind='bar', color=['green', 'gray', 'blue'], ax=ax)
-    ax.set_title("Distribusi Sentimen")
-    ax.set_xlabel("Sentimen")
-    ax.set_ylabel("Jumlah")
-    st.pyplot(fig)
+# Dictionary to store the count of news for each category
+category_counts = {category: 0 for category in categories_order}
 
-    # Filter data berdasarkan sentimen
-    st.write("Klik untuk melihat data berdasarkan Sentimen:")
-    selected_sentiment = st.radio("Pilih Sentimen", options=data['Sentiment'].unique())
-    filtered_data = data[data['Sentiment'] == selected_sentiment]
-    st.write(f"Data dengan Sentimen *{selected_sentiment}*: ")
-    st.dataframe(filtered_data, use_container_width=True)
+# Display each category and its clickable headlines with pagination
+items_per_page = 5  # Number of items per page
 
-    # Filter data berdasarkan kategori PESTEL
-    st.write("Klik untuk melihat data berdasarkan Kategori PESTEL:")
-    selected_pestel = st.selectbox("Pilih Kategori PESTEL", options=pestel_order)
-    pestel_filtered_data = data[data['PESTEL_Category'] == selected_pestel]
-    sentiment_in_pestel = pestel_filtered_data['Sentiment'].unique()
-    st.write(f"Kategori PESTEL *{selected_pestel}* terkait dengan Sentimen: {', '.join(sentiment_in_pestel)}")
-    st.dataframe(pestel_filtered_data, use_container_width=True)
+# Display the category headlines and their data
+for i, category in enumerate(categories_order):
+    with cols[i]:
+        color = categories[category]
+        st.markdown(f"""
+        <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
+            <h4 style='text-align: center; color: white;'>{category}</h4>
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Pie Chart Interaktif untuk PESTEL
-    st.write("Distribusi Berita berdasarkan Kategori PESTEL:")
-    pestel_counts = data['PESTEL_Category'].value_counts().reindex(pestel_order, fill_value=0).reset_index()
-    pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
-    fig_pie = px.pie(
-        pestel_counts,
-        names='PESTEL_Category',
-        values='Jumlah',
-        color='PESTEL_Category',
-        category_orders={'PESTEL_Category': pestel_order},
-        color_discrete_sequence=px.colors.qualitative.Set3,
-        title="Distribusi Berita PESTEL"
-    )
-    st.plotly_chart(fig_pie)
+        # Filter news for the current category
+        category_data = data[data["category"] == category]
 
-    # Analisis tren sentimen berdasarkan waktu
-    if 'pub_date' in data.columns and 'Sentiment' in data.columns:
-        data['pub_date'] = pd.to_datetime(data['pub_date'], errors='coerce')
-        data = data.dropna(subset=['pub_date'])
-        sentiment_trend = data.groupby([data['pub_date'].dt.date, 'Sentiment']).size().unstack()
-        fig, ax = plt.subplots(figsize=(10, 6))
-        sentiment_trend.plot(kind='line', ax=ax)
-        ax.set_title('Tren Sentimen Harian')
-        ax.set_xlabel('Tanggal')
-        ax.set_ylabel('Jumlah')
-        ax.legend(title='Sentimen')
-        st.pyplot(fig)
+        if category_data.empty:
+            st.write("Tidak ada berita.")
+        else:
+            # Session state for current page
+            if f"page_{category}" not in st.session_state:
+                st.session_state[f"page_{category}"] = 1
 
-    # **Masalah Utama yang Dilaporkan dengan Tabel dan Grafik Berdampingan:**
-    st.subheader("Masalah Utama yang Dilaporkan:")
-    top_problems = data['title'].value_counts().head(10)
+            # Calculate pagination
+            total_items = len(category_data)
+            total_pages = (total_items - 1) // items_per_page + 1
+            current_page = st.session_state[f"page_{category}"]
 
-    # Kolom kiri dan kanan untuk menampilkan Tabel dan Grafik
-    col1, col2 = st.columns([2, 1])
+            start_idx = (current_page - 1) * items_per_page
+            end_idx = start_idx + items_per_page
+            page_data = category_data.iloc[start_idx:end_idx]
 
-    with col1:
-        # Menampilkan tabel dengan styling
-        top_problems_df = top_problems.reset_index()
-        top_problems_df.columns = ['Masalah', 'Jumlah']
-        st.dataframe(top_problems_df.style.format({'Jumlah': '{:,}'}).background_gradient(axis=0, cmap='YlGnBu'))
+            # Display paginated headlines as cards
+            for _, row in page_data.iterrows():
+                headline = row["headline"]
+                link = row["link"]
+                st.markdown(f"""
+                <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                    <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
+                        <h5>{headline}</h5>
+                    </a>
+                </div>
+                """, unsafe_allow_html=True)
 
-    with col2:
-        # Menampilkan grafik batang untuk top problems
-        fig, ax = plt.subplots(figsize=(8, 5))
-        top_problems.plot(kind='bar', color='purple', ax=ax)
-        ax.set_title('Top 10 Masalah Utama')
-        ax.set_xlabel('Masalah')
-        ax.set_ylabel('Jumlah')
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-        st.pyplot(fig)
+            # Update the category count based on the number of items displayed on this page
+            category_counts[category] += len(page_data)
 
-    # Word Cloud untuk masalah utama
-    if 'title' in data.columns:
-        all_problems = ' '.join(data['title'].dropna())
-        wordcloud = WordCloud(width=800, height=400, background_color='white', colormap='viridis').generate(all_problems)
-        st.write("Word Cloud untuk Masalah Utama:")
-        fig, ax = plt.subplots(figsize=(10, 5))
-        ax.imshow(wordcloud, interpolation='bilinear')
-        ax.axis('off')
-        st.pyplot(fig)
+            # If there are multiple pages, display navigation
+            if total_pages > 1:
+                col1, col2 = st.columns([1, 1])
 
-    # Analisis laporan berdasarkan jam dan hari
-    if 'pub_date' in data.columns:
-        data['hour'] = data['pub_date'].dt.hour
-        data['day_of_week'] = data['pub_date'].dt.day_name()
+                with col1:
+                    if st.button("←", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
+                        if current_page > 1:
+                            st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
-        # Kolom kiri-kanan untuk distribusi laporan per jam
-        col1, col2 = st.columns([2, 1])
+                with col2:
+                    if st.button("→", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
+                        if current_page < total_pages:
+                            st.session_state[f"page_{category}"] += 1  # Go to next page
 
-        with col1:
-            # Distribusi laporan per jam
-            st.write("Distribusi Laporan per Jam:")
-            hourly_reports = data['hour'].value_counts().sort_index()
-            fig, ax = plt.subplots(figsize=(10, 5))
-            hourly_reports.plot(kind='bar', color='teal', ax=ax)
-            ax.set_title('Distribusi Laporan per Jam')
-            ax.set_xlabel('Jam')
-            ax.set_ylabel('Jumlah')
-            st.pyplot(fig)
+                # Display the current page number
+                st.markdown(
+                    f"<div style='text-align: center; font-size: 10px; color: gray;'>Halaman {current_page}/{total_pages}</div>",
+                    unsafe_allow_html=True,
+                )
 
-        with col2:
-            # Distribusi laporan per hari
-            st.write("Distribusi Laporan per Hari:")
-            daily_reports = data['day_of_week'].value_counts()
-            fig, ax = plt.subplots(figsize=(10, 5))
-            daily_reports.plot(kind='bar', color='salmon', ax=ax)
-            ax.set_title('Distribusi Laporan per Hari')
-            ax.set_xlabel('Hari')
-            ax.set_ylabel('Jumlah')
-            ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-            st.pyplot(fig)
+# Menghitung jumlah berita per kategori sesuai urutan PESTEL
+category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
-else:
-    st.error("File CSV tidak ditemukan. Silakan unggah file yang sesuai.")
+# Membuat pie chart dengan persentase
+pestel_counts = data['category'].value_counts().reindex(categories_order, fill_value=0).reset_index()
+pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
+
+# Membuat pie chart
+fig_pie = px.pie(
+    pestel_counts,
+    names='PESTEL_Category',
+    values='Jumlah',
+    color='PESTEL_Category',
+    category_orders={'PESTEL_Category': categories_order},
+    color_discrete_sequence=px.colors.qualitative.Set3,
+    title="Distribusi Berita berdasarkan Kategori PESTEL"
+)
+
+# Menampilkan pie chart dengan persentase
+st.plotly_chart(fig_pie)
