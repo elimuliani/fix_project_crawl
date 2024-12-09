@@ -2,17 +2,17 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Set page configuration - Make sure this is at the very top
+# Set page configuration
 st.set_page_config(
     page_title="PESTEL Analysis Dashboard",
     layout="wide",
 )
 
 # Title
-st.title("📊 PESTEL Analysis Dashboard")  # Fixed the emoji encoding
+st.title("📊 PESTEL Analysis Dashboard")
 
 # Load CSV file
-file_path = "pln_clean_fix.csv"  # Replace with your CSV file path
+file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
 try:
     data = pd.read_csv(file_path)
     st.success("Data berhasil dimuat!")
@@ -20,14 +20,10 @@ except FileNotFoundError:
     st.error("File CSV tidak ditemukan. Pastikan file berada di path yang benar.")
     st.stop()
 
-# Check column names
-st.write("Column names in the CSV file:", data.columns)
-
 # Ensure the required columns exist
-required_columns = {"headline", "Sentiment", "category", "link"}
+required_columns = {"headline", "link", "category"}
 if not required_columns.issubset(data.columns):
-    missing_columns = [col for col in required_columns if col not in data.columns]
-    st.error(f"File CSV harus memiliki kolom: {', '.join(missing_columns)}")
+    st.error(f"File CSV harus memiliki kolom: {required_columns}")
     st.stop()
 
 # PESTEL categories in correct order
@@ -86,15 +82,11 @@ for i, category in enumerate(categories_order):
             for _, row in page_data.iterrows():
                 headline = row["headline"]
                 link = row["link"]
-                sentiment = row["sentiment"]
-                sentiment_color = "green" if sentiment == "Positif" else "gray"
-
                 st.markdown(f"""
                 <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
                         <h5>{headline}</h5>
                     </a>
-                    <p style="color: {sentiment_color};">Sentimen: {sentiment}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -106,12 +98,12 @@ for i, category in enumerate(categories_order):
                 col1, col2 = st.columns([1, 1])
 
                 with col1:
-                    if st.button("\u2190", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
+                    if st.button("←", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
                         if current_page > 1:
                             st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
                 with col2:
-                    if st.button("\u2192", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
+                    if st.button("→", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
                         if current_page < total_pages:
                             st.session_state[f"page_{category}"] += 1  # Go to next page
 
@@ -124,57 +116,20 @@ for i, category in enumerate(categories_order):
 # Menghitung jumlah berita per kategori sesuai urutan PESTEL
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
-# Membuat pie chart distribusi kategori dengan persentase
-fig = px.pie(
-    names=categories_order,
-    values=category_counts,
-    color=categories_order,
-    hole=0.3,
-    color_discrete_map={
-        "Politik": "#FFD700",   # Kuning
-        "Ekonomi": "#32CD32",   # Hijau
-        "Sosial": "#1E90FF",    # Biru
-        "Teknologi": "#8A2BE2", # Ungu
-        "Lingkungan": "#FF6347",# Merah
-        "Legal": "#FF4500",     # Jingga
-    },
-    title="Distribusi Kategori Berita (PESTEL)",
+# Membuat pie chart dengan persentase
+pestel_counts = data['category'].value_counts().reindex(categories_order, fill_value=0).reset_index()
+pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
+
+# Membuat pie chart
+fig_pie = px.pie(
+    pestel_counts,
+    names='PESTEL_Category',
+    values='Jumlah',
+    color='PESTEL_Category',
+    category_orders={'PESTEL_Category': categories_order},
+    color_discrete_sequence=px.colors.qualitative.Set3,
+    title="Distribusi Berita berdasarkan Kategori PESTEL"
 )
 
-fig.update_traces(
-    hoverinfo="label+percent",
-    textinfo="percent",
-)
-
-fig.update_layout(
-    showlegend=True,
-    legend_title="Kategori",
-    legend=dict(
-        orientation="h",  # Horizontal
-        yanchor="bottom",
-        y=-0.2,  # Menempatkan legenda di bawah chart
-        xanchor="center",
-        x=0.5
-    ),
-    margin=dict(t=40, b=40, l=40, r=40),  # Margin agar lebih jelas
-    height=500,  # Tinggi chart
-    title_x=0.5,  # Judul di tengah
-    title_font=dict(size=16),
-)
-
-# Menampilkan pie chart
-st.plotly_chart(fig)
-
-# Tambahkan chart distribusi sentimen
-sentiment_distribution = data.groupby(['category', 'Sentiment']).size().reset_index(name='count')
-fig_sentiment = px.bar(
-    sentiment_distribution,
-    x='category',
-    y='count',
-    color='sentiment',
-    color_discrete_map={"Positif": "green", "Netral": "gray"},
-    title="Distribusi Sentimen per Kategori",
-    barmode='group'
-)
-
-st.plotly_chart(fig_sentiment)
+# Menampilkan pie chart dengan persentase
+st.plotly_chart(fig_pie)
