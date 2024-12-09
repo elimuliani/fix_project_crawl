@@ -24,7 +24,7 @@ except FileNotFoundError:
 st.write("Column names in the CSV file:", data.columns)
 
 # Ensure the required columns exist
-required_columns = {"headline", "sentiment", "category", "link"}
+required_columns = {"headline", "Sentiment", "category", "link"}
 if not required_columns.issubset(data.columns):
     missing_columns = [col for col in required_columns if col not in data.columns]
     st.error(f"File CSV harus memiliki kolom: {', '.join(missing_columns)}")
@@ -166,7 +166,7 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 # Tambahkan chart distribusi sentimen
-sentiment_distribution = data.groupby(['category', 'sentiment']).size().reset_index(name='count')
+sentiment_distribution = data.groupby(['category', 'Sentiment']).size().reset_index(name='count')
 fig_sentiment = px.bar(
     sentiment_distribution,
     x='category',
