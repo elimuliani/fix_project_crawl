@@ -21,7 +21,7 @@ except FileNotFoundError:
     st.stop()
 
 # Ensure the required columns exist
-required_columns = {"headline",  "link", "category", "Sentiment"}
+required_columns = {"headline", "link", "category", "sentiment"}
 if not required_columns.issubset(data.columns):
     st.error(f"File CSV harus memiliki kolom: {required_columns}")
     st.stop()
