@@ -12,7 +12,7 @@ st.set_page_config(
 st.title("📊 PESTEL Analysis Dashboard")
 
 # Load CSV file
-file_path = "pln_clean.csv"  # Ganti dengan nama file CSV Anda
+file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
 try:
     data = pd.read_csv(file_path)
     st.success("Data berhasil dimuat!")
