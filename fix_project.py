@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # Title
-st.title("\ud83d\udcca PESTEL Analysis Dashboard")
+st.title("📊 PESTEL Analysis Dashboard")  # Fixed the emoji encoding
 
 # Load CSV file
 file_path = "pln_clean_fix.csv"  # Replace with your CSV file path
