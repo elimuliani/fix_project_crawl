@@ -120,11 +120,11 @@ for i, category in enumerate(categories_order):
 # Menghitung jumlah berita per kategori sesuai urutan PESTEL
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
 
-# Membuat pie chart distribusi sentimen untuk setiap kategori
+# Membuat pie chart distribusi kategori dengan persentase
 fig = px.pie(
-    data,
-    names="category",
-    color="category",
+    names=categories_order,
+    values=category_counts,
+    color=categories_order,
     hole=0.3,
     color_discrete_map={
         "Politik": "#FFD700",   # Kuning
@@ -139,7 +139,7 @@ fig = px.pie(
 
 fig.update_traces(
     hoverinfo="label+percent",
-    textinfo="label+value",
+    textinfo="percent",
 )
 
 fig.update_layout(
