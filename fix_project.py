@@ -11,11 +11,6 @@ st.set_page_config(
 # Title
 st.title("📊 PESTEL Analysis Dashboard")
 
-# Calculate date range
-start_date = data['date'].min().strftime('%B %Y')
-end_date = data['date'].max().strftime('%B %Y')
-st.markdown(f"**Data Range:** {start_date} - {end_date}", unsafe_allow_html=True)
-
 # Load CSV file
 file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
 try:
@@ -36,10 +31,25 @@ if not required_columns.issubset(data.columns):
 
 # Convert date column to datetime format
 data['date'] = pd.to_datetime(data['date'], errors='coerce')
-data['formatted_date'] = data['date'].dt.strftime('%d-%m-%Y')
 
 # Drop rows with invalid dates
 data = data.dropna(subset=['date'])
+
+# Get the range of dates
+start_date = data['date'].min()
+end_date = data['date'].max()
+
+# Ensure valid start and end dates
+if pd.isna(start_date) or pd.isna(end_date):
+    st.error("Data tidak memiliki tanggal yang valid.")
+    st.stop()
+
+# Format dates
+start_date_str = start_date.strftime('%B %Y')
+end_date_str = end_date.strftime('%B %Y')
+
+# Show date range on the dashboard
+st.markdown(f"**Data Berita PESTEL dari {start_date_str} hingga {end_date_str}**")
 
 # PESTEL categories in correct order
 categories_order = [
@@ -71,7 +81,7 @@ for i, category in enumerate(categories_order):
         count = len(category_data)
         st.markdown(f"""
         <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
-            <h4 style='text-align: center; color: white; font-size: 18px;'>{category}</h4>
+            <h4 style='text-align: center; color: white;'>{category}</h4>
             <p style='text-align: center; color: white; font-size: 14px;'>({count} berita)</p>
         </div>
         """, unsafe_allow_html=True)
@@ -96,12 +106,13 @@ for i, category in enumerate(categories_order):
             for _, row in page_data.iterrows():
                 headline = row["headline"]
                 link = row["link"]
-                date = row["formatted_date"]  # Use formatted date
+                date = row["date"].strftime('%d-%m-%Y')  # Use formatted date
                 st.markdown(f"""
                 <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
                         <h5>{headline}</h5>
                     </a>
+                    <p style="color: gray; font-size: 15px;">{date}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
