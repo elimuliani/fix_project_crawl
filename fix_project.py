@@ -66,7 +66,7 @@ for i, category in enumerate(categories_order):
         count = len(category_data)
         st.markdown(f"""
         <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
-            <h4 style='text-align: center; color: white;'>{category}</h4>
+            <h4 style='text-align: center; color: white; font-size: 24px;'>{category}</h4>
             <p style='text-align: center; color: white; font-size: 14px;'>({count} berita)</p>
         </div>
         """, unsafe_allow_html=True)
@@ -97,7 +97,7 @@ for i, category in enumerate(categories_order):
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
                         <h5>{headline}</h5>
                     </a>
-                    <p style="color: gray; font-size: 16px;">{date}</p>
+                    <p style="color: gray; font-size: 15px;">{date}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
