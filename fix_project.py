@@ -43,7 +43,7 @@ end_date = data['date'].max().strftime('%B %Y')
 # Display the date range next to the dashboard title
 st.markdown(f"""
     <h3 style="text-align: center;">
-        📊 PESTEL Analysis Dashboard (Berita dari {start_date} sampai {end_date})
+    (Berita dari {start_date} sampai {end_date})
     </h3>
 """, unsafe_allow_html=True)
 
