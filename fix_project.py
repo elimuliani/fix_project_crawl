@@ -187,3 +187,8 @@ st.markdown("""
             <ul>
                 <li>Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
                 <li>Manajemen Risiko
+            </ul>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
