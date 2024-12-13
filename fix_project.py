@@ -36,6 +36,17 @@ data['formatted_date'] = data['date'].dt.strftime('%d-%m-%Y')
 # Drop rows with invalid dates
 data = data.dropna(subset=['date'])
 
+# Get the date range (min and max)
+start_date = data['date'].min().strftime('%B %Y')
+end_date = data['date'].max().strftime('%B %Y')
+
+# Display the date range next to the dashboard title
+st.markdown(f"""
+    <h3 style="text-align: center;">
+        📊 PESTEL Analysis Dashboard <span style="font-size: 14px; color: gray;">(Berita dari {start_date} sampai {end_date})</span>
+    </h3>
+""", unsafe_allow_html=True)
+
 # PESTEL categories in correct order
 categories_order = [
     "Politik", "Ekonomi", "Sosial", "Teknologi", "Lingkungan", "Legal"
@@ -175,23 +186,4 @@ st.markdown("""
             <h4 style="color: #2b6cb0;">🌱 Environmental (Lingkungan)</h4>
             <ul>
                 <li>Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
-                <li>Manajemen Risiko Bencana pada Infrastruktur Energi</li>
-            </ul>
-        </div>
-        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">⚖ Legal (Hukum)</h4>
-            <ul>
-                <li>Hukum Energi dan Standar Internasional</li>
-                <li>Manajemen Risiko Hukum dalam Transisi Energi</li>
-            </ul>
-        </div>
-        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">🚀 Future Competencies</h4>
-            <ul>
-                <li>Green Leadership untuk Manajemen Proyek Energi</li>
-                <li>Multidisiplin Skill untuk Inovasi Energi</li>
-            </ul>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+                <li>Manajemen Risiko
