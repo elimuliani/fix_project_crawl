@@ -80,11 +80,13 @@ for i, category in enumerate(categories_order):
         # Display category header with count of news
         count = len(category_data)
         st.markdown(f"""
-        <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
-            <h4 style='text-align: center; color: white;'>{category}</h4>
-            <p style='text-align: center; color: white; font-size: 14px;'>({count} berita)</p>
-        </div>
-        """, unsafe_allow_html=True)
+<div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+    <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
+        <h5>{headline}</h5>
+    </a>
+</div>
+""", unsafe_allow_html=True)
+
 
         if category_data.empty:
             st.write("Tidak ada berita.")
