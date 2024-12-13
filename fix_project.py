@@ -137,22 +137,57 @@ st.plotly_chart(fig_pie)
 # Rekomendasi Pembelajaran
 st.markdown("""
 <div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
-    <h3>📘 Rekomendasi Pembelajaran untuk Kompetensi Masa Depan</h3>
-    <ul>
-        <li><strong>Political (Politik):</strong> Mengelola Hubungan Multi-Stakeholder dalam Proyek Infrastruktur Strategis</li>
-        <li><strong>Political (Politik):</strong> Advokasi Kebijakan untuk Transisi Energi Berkelanjutan</li>
-        <li><strong>Economic (Ekonomi):</strong> Model Bisnis untuk Green Energy</li>
-        <li><strong>Economic (Ekonomi):</strong> Ekonomi Sirkular dan Manajemen Risiko Energi</li>
-        <li><strong>Social (Sosial):</strong> Strategi Sosialisasi dan Edukasi Energi Baru Terbarukan</li>
-        <li><strong>Social (Sosial):</strong> Pemberdayaan Ekonomi Lokal melalui Infrastruktur Energi</li>
-        <li><strong>Technological (Teknologi):</strong> IoT dan Smart Grid untuk Infrastruktur Kelistrikan</li>
-        <li><strong>Technological (Teknologi):</strong> Pengembangan Kompetensi Hidrogen dan Kendaraan Listrik</li>
-        <li><strong>Environmental (Lingkungan):</strong> Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
-        <li><strong>Environmental (Lingkungan):</strong> Manajemen Risiko Bencana pada Infrastruktur Energi</li>
-        <li><strong>Legal (Hukum):</strong> Hukum Energi dan Standar Internasional</li>
-        <li><strong>Legal (Hukum):</strong> Manajemen Risiko Hukum dalam Transisi Energi</li>
-        <li><strong>Future Competencies:</strong> Green Leadership untuk Manajemen Proyek Energi</li>
-        <li><strong>Future Competencies:</strong> Multidisiplin Skill untuk Inovasi Energi</li>
-    </ul>
+    <h3 style='text-align: center;'>📘 Rekomendasi Pembelajaran untuk Kompetensi Masa Depan</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>🌐 Political (Politik)</h4>
+            <ul>
+                <li>Mengelola Hubungan Multi-Stakeholder dalam Proyek Infrastruktur Strategis</li>
+                <li>Advokasi Kebijakan untuk Transisi Energi Berkelanjutan</li>
+            </ul>
+        </div>
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>💰 Economic (Ekonomi)</h4>
+            <ul>
+                <li>Model Bisnis untuk Green Energy</li>
+                <li>Ekonomi Sirkular dan Manajemen Risiko Energi</li>
+            </ul>
+        </div>
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>🤝 Social (Sosial)</h4>
+            <ul>
+                <li>Strategi Sosialisasi dan Edukasi Energi Baru Terbarukan</li>
+                <li>Pemberdayaan Ekonomi Lokal melalui Infrastruktur Energi</li>
+            </ul>
+        </div>
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>🔧 Technological (Teknologi)</h4>
+            <ul>
+                <li>IoT dan Smart Grid untuk Infrastruktur Kelistrikan</li>
+                <li>Pengembangan Kompetensi Hidrogen dan Kendaraan Listrik</li>
+            </ul>
+        </div>
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>🌱 Environmental (Lingkungan)</h4>
+            <ul>
+                <li>Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
+                <li>Manajemen Risiko Bencana pada Infrastruktur Energi</li>
+            </ul>
+        </div>
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>⚖️ Legal (Hukum)</h4>
+            <ul>
+                <li>Hukum Energi dan Standar Internasional</li>
+                <li>Manajemen Risiko Hukum dalam Transisi Energi</li>
+            </ul>
+        </div>
+        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4>🚀 Future Competencies</h4>
+            <ul>
+                <li>Green Leadership untuk Manajemen Proyek Energi</li>
+                <li>Multidisiplin Skill untuk Inovasi Energi</li>
+            </ul>
+        </div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
