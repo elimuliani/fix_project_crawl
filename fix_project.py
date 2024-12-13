@@ -26,6 +26,10 @@ if not required_columns.issubset(data.columns):
     st.error(f"File CSV harus memiliki kolom: {required_columns}")
     st.stop()
 
+# Convert date column to datetime format
+data['date'] = pd.to_datetime(data['date'], errors='coerce')
+data['formatted_date'] = data['date'].dt.strftime('%d-%m-%Y')
+
 # PESTEL categories in correct order
 categories_order = [
     "Politik", "Ekonomi", "Sosial", "Teknologi", "Lingkungan", "Legal"
@@ -80,7 +84,7 @@ for i, category in enumerate(categories_order):
             for _, row in page_data.iterrows():
                 headline = row["headline"]
                 link = row["link"]
-                date = row["date"]  # Assuming 'date' column exists
+                date = row["formatted_date"]  # Use formatted date
                 st.markdown(f"""
                 <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
@@ -109,6 +113,12 @@ for i, category in enumerate(categories_order):
                     f"<div style='text-align: center; font-size: 10px; color: gray;'>Halaman {current_page}/{total_pages}</div>",
                     unsafe_allow_html=True,
                 )
+
+# Tabel jumlah berita per kategori
+st.markdown("### Jumlah Berita per Kategori")
+category_counts_table = data['category'].value_counts().reindex(categories_order, fill_value=0).reset_index()
+category_counts_table.columns = ['Kategori', 'Jumlah Berita']
+st.table(category_counts_table)
 
 # Menghitung jumlah berita per kategori sesuai urutan PESTEL
 category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
