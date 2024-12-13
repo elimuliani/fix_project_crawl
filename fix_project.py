@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # Title
-st.title("🔁 PESTEL Analysis Dashboard")
+st.title("📊 PESTEL Analysis Dashboard")
 
 # Load CSV file
 file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
