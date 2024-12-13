@@ -97,7 +97,7 @@ for i, category in enumerate(categories_order):
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
                         <h5>{headline}</h5>
                     </a>
-                    <p style="color: gray; font-size: 12px;">{date}</p>
+                    <p style="color: gray; font-size: 14px;">{date}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
