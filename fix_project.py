@@ -11,6 +11,11 @@ st.set_page_config(
 # Title
 st.title("📊 PESTEL Analysis Dashboard")
 
+# Calculate date range
+start_date = data['date'].min().strftime('%B %Y')
+end_date = data['date'].max().strftime('%B %Y')
+st.markdown(f"**Data Range:** {start_date} - {end_date}", unsafe_allow_html=True)
+
 # Load CSV file
 file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
 try:
@@ -66,7 +71,7 @@ for i, category in enumerate(categories_order):
         count = len(category_data)
         st.markdown(f"""
         <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
-            <h4 style='text-align: center; color: white;'>{category}</h4>
+            <h4 style='text-align: center; color: white; font-size: 18px;'>{category}</h4>
             <p style='text-align: center; color: white; font-size: 14px;'>({count} berita)</p>
         </div>
         """, unsafe_allow_html=True)
@@ -97,7 +102,6 @@ for i, category in enumerate(categories_order):
                     <a href="{link}" target="_blank" style="text-decoration: none; color: black;">
                         <h5>{headline}</h5>
                     </a>
-                    <p style="color: gray; font-size: 15px;">{date}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -196,4 +200,3 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
