@@ -139,13 +139,20 @@ st.markdown("""
 <div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
     <h3>📘 Rekomendasi Pembelajaran untuk Kompetensi Masa Depan</h3>
     <ul>
-        <li><strong>Political (Politik):</strong> Navigating Regulatory Frameworks: Kompetensi Mengelola Regulasi Energi Nasional dan Internasional</li>
-        <li><strong>Economic (Ekonomi):</strong> Membangun Model Bisnis Berkelanjutan untuk Energi Masa Depan</li>
-        <li><strong>Social (Sosial):</strong> Strategi Komunikasi dan Sosialisasi di Komunitas untuk Energi Terbarukan</li>
-        <li><strong>Technological (Teknologi):</strong> Menerapkan Teknologi Digital dan IoT untuk Infrastruktur Kelistrikan</li>
-        <li><strong>Environmental (Lingkungan):</strong> Manajemen Proyek Hijau: Menyeimbangkan Keberlanjutan dan Pertumbuhan</li>
-        <li><strong>Legal (Hukum):</strong> Kepatuhan Hukum dan Standar Internasional di Sektor Energi</li>
-        <li><strong>Future Competencies:</strong> Leadership di Era Transisi Energi</li>
+        <li><strong>Political (Politik):</strong> Mengelola Hubungan Multi-Stakeholder dalam Proyek Infrastruktur Strategis</li>
+        <li><strong>Political (Politik):</strong> Advokasi Kebijakan untuk Transisi Energi Berkelanjutan</li>
+        <li><strong>Economic (Ekonomi):</strong> Model Bisnis untuk Green Energy</li>
+        <li><strong>Economic (Ekonomi):</strong> Ekonomi Sirkular dan Manajemen Risiko Energi</li>
+        <li><strong>Social (Sosial):</strong> Strategi Sosialisasi dan Edukasi Energi Baru Terbarukan</li>
+        <li><strong>Social (Sosial):</strong> Pemberdayaan Ekonomi Lokal melalui Infrastruktur Energi</li>
+        <li><strong>Technological (Teknologi):</strong> IoT dan Smart Grid untuk Infrastruktur Kelistrikan</li>
+        <li><strong>Technological (Teknologi):</strong> Pengembangan Kompetensi Hidrogen dan Kendaraan Listrik</li>
+        <li><strong>Environmental (Lingkungan):</strong> Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
+        <li><strong>Environmental (Lingkungan):</strong> Manajemen Risiko Bencana pada Infrastruktur Energi</li>
+        <li><strong>Legal (Hukum):</strong> Hukum Energi dan Standar Internasional</li>
+        <li><strong>Legal (Hukum):</strong> Manajemen Risiko Hukum dalam Transisi Energi</li>
+        <li><strong>Future Competencies:</strong> Green Leadership untuk Manajemen Proyek Energi</li>
+        <li><strong>Future Competencies:</strong> Multidisiplin Skill untuk Inovasi Energi</li>
     </ul>
 </div>
 """, unsafe_allow_html=True)
