@@ -120,22 +120,11 @@ for i, category in enumerate(categories_order):
                     unsafe_allow_html=True,
                 )
 
-# Tabel jumlah berita per kategori
-st.markdown("### Jumlah Berita per Kategori")
-category_counts_table = data['category'].value_counts().reindex(categories_order, fill_value=0).reset_index()
-category_counts_table.columns = ['Kategori', 'Jumlah Berita']
-st.table(category_counts_table)
-
-# Menampilkan jumlah total berita per kategori di bawah tabel
-st.markdown("#### Total Berita per Kategori")
-for index, row in category_counts_table.iterrows():
-    st.write(f"{row['Kategori']}: {row['Jumlah Berita']} berita")
-
-# Membuat pie chart dengan persentase
+# Pie Chart
 pestel_counts = data['category'].value_counts().reindex(categories_order, fill_value=0).reset_index()
 pestel_counts.columns = ['PESTEL_Category', 'Jumlah']
 
-# Membuat pie chart
+# Create pie chart
 fig_pie = px.pie(
     pestel_counts,
     names='PESTEL_Category',
@@ -146,7 +135,7 @@ fig_pie = px.pie(
     title="Pie Chart Berita PESTEL"
 )
 
-# Menampilkan pie chart dengan persentase
+# Display pie chart with percentage
 st.plotly_chart(fig_pie)
 
 # Rekomendasi Pembelajaran
