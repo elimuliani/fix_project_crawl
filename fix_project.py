@@ -137,52 +137,52 @@ st.plotly_chart(fig_pie)
 # Rekomendasi Pembelajaran
 st.markdown("""
 <div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
-    <h3 style='text-align: center;'>📘 Rekomendasi Pembelajaran untuk Kompetensi Masa Depan</h3>
+    <h3 style='text-align: center;'>📘 Rekomendasi Generate AI untuk Kompetensi Masa Depan</h3>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>🌐 Political (Politik)</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">🌐 Political (Politik)</h4>
             <ul>
                 <li>Mengelola Hubungan Multi-Stakeholder dalam Proyek Infrastruktur Strategis</li>
                 <li>Advokasi Kebijakan untuk Transisi Energi Berkelanjutan</li>
             </ul>
         </div>
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>💰 Economic (Ekonomi)</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">💰 Economic (Ekonomi)</h4>
             <ul>
                 <li>Model Bisnis untuk Green Energy</li>
                 <li>Ekonomi Sirkular dan Manajemen Risiko Energi</li>
             </ul>
         </div>
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>🤝 Social (Sosial)</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">🤝 Social (Sosial)</h4>
             <ul>
                 <li>Strategi Sosialisasi dan Edukasi Energi Baru Terbarukan</li>
                 <li>Pemberdayaan Ekonomi Lokal melalui Infrastruktur Energi</li>
             </ul>
         </div>
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>🔧 Technological (Teknologi)</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">🔧 Technological (Teknologi)</h4>
             <ul>
                 <li>IoT dan Smart Grid untuk Infrastruktur Kelistrikan</li>
                 <li>Pengembangan Kompetensi Hidrogen dan Kendaraan Listrik</li>
             </ul>
         </div>
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>🌱 Environmental (Lingkungan)</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">🌱 Environmental (Lingkungan)</h4>
             <ul>
                 <li>Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
                 <li>Manajemen Risiko Bencana pada Infrastruktur Energi</li>
             </ul>
         </div>
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>⚖️ Legal (Hukum)</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">⚖️ Legal (Hukum)</h4>
             <ul>
                 <li>Hukum Energi dan Standar Internasional</li>
                 <li>Manajemen Risiko Hukum dalam Transisi Energi</li>
             </ul>
         </div>
-        <div style="background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4>🚀 Future Competencies</h4>
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h4 style="color: #2b6cb0;">🚀 Future Competencies</h4>
             <ul>
                 <li>Green Leadership untuk Manajemen Proyek Energi</li>
                 <li>Multidisiplin Skill untuk Inovasi Energi</li>
