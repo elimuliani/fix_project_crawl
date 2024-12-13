@@ -62,11 +62,12 @@ for i, category in enumerate(categories_order):
         color = categories[category]
         category_data = data[data["category"] == category]
 
-        # Display category header with count of news
+        # Display category header with count of news in smaller font size
         count = len(category_data)
         st.markdown(f"""
         <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
-            <h4 style='text-align: center; color: white;'>{category} ({count} berita)</h4>
+            <h4 style='text-align: center; color: white; margin-bottom: 0;'>{category}</h4>
+            <h6 style='text-align: center; color: white; font-size: 12px; margin-top: 5px;'>{count} berita</h6>
         </div>
         """, unsafe_allow_html=True)
 
@@ -178,20 +179,4 @@ st.markdown("""
                 <li>Manajemen Risiko Bencana pada Infrastruktur Energi</li>
             </ul>
         </div>
-        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">⚖ Legal (Hukum)</h4>
-            <ul>
-                <li>Hukum Energi dan Standar Internasional</li>
-                <li>Manajemen Risiko Hukum dalam Transisi Energi</li>
-            </ul>
-        </div>
-        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">🚀 Future Competencies</h4>
-            <ul>
-                <li>Green Leadership untuk Manajemen Proyek Energi</li>
-                <li>Multidisiplin Skill untuk Inovasi Energi</li>
-            </ul>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+        <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 
