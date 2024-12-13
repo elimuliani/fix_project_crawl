@@ -66,7 +66,7 @@ for i, category in enumerate(categories_order):
         count = len(category_data)
         st.markdown(f"""
         <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
-            <h4 style='text-align: center; color: white; font-size: 18px;'>{category}</h4>
+            <h4 style='text-align: center; color: white;'>{category}</h4>
             <p style='text-align: center; color: white; font-size: 12px;'>({count} berita)</p>
         </div>
         """, unsafe_allow_html=True)
@@ -189,9 +189,4 @@ st.markdown("""<div style='padding: 20px; background-color: #f9f9f9; border-radi
             <h4 style="color: #2b6cb0;">🚀 Future Competencies</h4>
             <ul>
                 <li>Green Leadership untuk Manajemen Proyek Energi</li>
-                <li>Multidisiplin Skill untuk Inovasi Energi</li>
-            </ul>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+                <li>Mult
