@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # Title
-st.title("\ud83d\udd01 PESTEL Analysis Dashboard")
+st.title("🔁 PESTEL Analysis Dashboard")
 
 # Load CSV file
 file_path = "pln_clean_fix.csv"  # Ganti dengan nama file CSV Anda
@@ -18,6 +18,9 @@ try:
     st.success("Data berhasil dimuat!")
 except FileNotFoundError:
     st.error("File CSV tidak ditemukan. Pastikan file berada di path yang benar.")
+    st.stop()
+except Exception as e:
+    st.error(f"Terjadi kesalahan saat memuat data: {e}")
     st.stop()
 
 # Ensure the required columns exist
@@ -29,6 +32,9 @@ if not required_columns.issubset(data.columns):
 # Convert date column to datetime format
 data['date'] = pd.to_datetime(data['date'], errors='coerce')
 data['formatted_date'] = data['date'].dt.strftime('%d-%m-%Y')
+
+# Drop rows with invalid dates
+data = data.dropna(subset=['date'])
 
 # PESTEL categories in correct order
 categories_order = [
@@ -99,12 +105,12 @@ for i, category in enumerate(categories_order):
                 col1, col2 = st.columns([1, 1])
 
                 with col1:
-                    if st.button("\u2190", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
+                    if st.button("←", key=f"prev_{category}", help="Halaman Sebelumnya", use_container_width=True):
                         if current_page > 1:
                             st.session_state[f"page_{category}"] -= 1  # Go to previous page
 
                 with col2:
-                    if st.button("\u2192", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
+                    if st.button("→", key=f"next_{category}", help="Halaman Berikutnya", use_container_width=True):
                         if current_page < total_pages:
                             st.session_state[f"page_{category}"] += 1  # Go to next page
 
@@ -144,52 +150,52 @@ st.plotly_chart(fig_pie)
 # Rekomendasi Pembelajaran
 st.markdown("""
 <div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
-    <h3 style='text-align: center;'>\ud83d\udcd8 Rekomendasi Generate AI untuk Kompetensi Masa Depan</h3>
+    <h3 style='text-align: center;'>📘 Rekomendasi Generate AI untuk Kompetensi Masa Depan</h3>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\ud83c\udf10 Political (Politik)</h4>
+            <h4 style="color: #2b6cb0;">🌐 Political (Politik)</h4>
             <ul>
                 <li>Mengelola Hubungan Multi-Stakeholder dalam Proyek Infrastruktur Strategis</li>
                 <li>Advokasi Kebijakan untuk Transisi Energi Berkelanjutan</li>
             </ul>
         </div>
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\ud83d\udcb0 Economic (Ekonomi)</h4>
+            <h4 style="color: #2b6cb0;">💰 Economic (Ekonomi)</h4>
             <ul>
                 <li>Model Bisnis untuk Green Energy</li>
                 <li>Ekonomi Sirkular dan Manajemen Risiko Energi</li>
             </ul>
         </div>
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\ud83e\udd1d Social (Sosial)</h4>
+            <h4 style="color: #2b6cb0;">🤝 Social (Sosial)</h4>
             <ul>
                 <li>Strategi Sosialisasi dan Edukasi Energi Baru Terbarukan</li>
                 <li>Pemberdayaan Ekonomi Lokal melalui Infrastruktur Energi</li>
             </ul>
         </div>
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\ud83d\udd27 Technological (Teknologi)</h4>
+            <h4 style="color: #2b6cb0;">🔧 Technological (Teknologi)</h4>
             <ul>
                 <li>IoT dan Smart Grid untuk Infrastruktur Kelistrikan</li>
                 <li>Pengembangan Kompetensi Hidrogen dan Kendaraan Listrik</li>
             </ul>
         </div>
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\ud83c\udf31 Environmental (Lingkungan)</h4>
+            <h4 style="color: #2b6cb0;">🌱 Environmental (Lingkungan)</h4>
             <ul>
                 <li>Perencanaan Infrastruktur Hijau untuk Ketahanan Energi</li>
                 <li>Manajemen Risiko Bencana pada Infrastruktur Energi</li>
             </ul>
         </div>
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\u2696 Legal (Hukum)</h4>
+            <h4 style="color: #2b6cb0;">⚖ Legal (Hukum)</h4>
             <ul>
                 <li>Hukum Energi dan Standar Internasional</li>
                 <li>Manajemen Risiko Hukum dalam Transisi Energi</li>
             </ul>
         </div>
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h4 style="color: #2b6cb0;">\ud83d\ude80 Future Competencies</h4>
+            <h4 style="color: #2b6cb0;">🚀 Future Competencies</h4>
             <ul>
                 <li>Green Leadership untuk Manajemen Proyek Energi</li>
                 <li>Multidisiplin Skill untuk Inovasi Energi</li>
