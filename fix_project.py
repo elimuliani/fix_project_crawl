@@ -67,7 +67,7 @@ for i, category in enumerate(categories_order):
         st.markdown(f"""
         <div class="category-header" style='background: {color}; padding: 10px; border-radius: 10px;'>
             <h4 style='text-align: center; color: white;'>{category}</h4>
-            <p style='text-align: center; color: white; font-size: 12px;'>({count} berita)</p>
+            <p style='text-align: center; color: white; font-size: 14px;'>({count} berita)</p>
         </div>
         """, unsafe_allow_html=True)
 
