@@ -140,7 +140,8 @@ fig_pie = px.pie(
 st.plotly_chart(fig_pie)
 
 # Rekomendasi Pembelajaran
-st.markdown("""<div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
+st.markdown("""
+<div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
     <h3 style='text-align: center;'>📘 Rekomendasi Generate AI untuk Kompetensi Masa Depan</h3>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
         <div style="background-color: #eef7ff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -189,4 +190,10 @@ st.markdown("""<div style='padding: 20px; background-color: #f9f9f9; border-radi
             <h4 style="color: #2b6cb0;">🚀 Future Competencies</h4>
             <ul>
                 <li>Green Leadership untuk Manajemen Proyek Energi</li>
-                <li>Mult
+                <li>Multidisiplin Skill untuk Inovasi Energi</li>
+            </ul>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
