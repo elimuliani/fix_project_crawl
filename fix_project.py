@@ -133,3 +133,19 @@ fig_pie = px.pie(
 
 # Menampilkan pie chart dengan persentase
 st.plotly_chart(fig_pie)
+
+# Rekomendasi Pembelajaran
+st.markdown("""
+<div style='padding: 20px; background-color: #f9f9f9; border-radius: 10px; margin-top: 20px;'>
+    <h3>📘 Rekomendasi Pembelajaran untuk Kompetensi Masa Depan</h3>
+    <ul>
+        <li><strong>Political (Politik):</strong> Navigating Regulatory Frameworks: Kompetensi Mengelola Regulasi Energi Nasional dan Internasional</li>
+        <li><strong>Economic (Ekonomi):</strong> Membangun Model Bisnis Berkelanjutan untuk Energi Masa Depan</li>
+        <li><strong>Social (Sosial):</strong> Strategi Komunikasi dan Sosialisasi di Komunitas untuk Energi Terbarukan</li>
+        <li><strong>Technological (Teknologi):</strong> Menerapkan Teknologi Digital dan IoT untuk Infrastruktur Kelistrikan</li>
+        <li><strong>Environmental (Lingkungan):</strong> Manajemen Proyek Hijau: Menyeimbangkan Keberlanjutan dan Pertumbuhan</li>
+        <li><strong>Legal (Hukum):</strong> Kepatuhan Hukum dan Standar Internasional di Sektor Energi</li>
+        <li><strong>Future Competencies:</strong> Leadership di Era Transisi Energi</li>
+    </ul>
+</div>
+""", unsafe_allow_html=True)
