@@ -126,8 +126,10 @@ category_counts_table = data['category'].value_counts().reindex(categories_order
 category_counts_table.columns = ['Kategori', 'Jumlah Berita']
 st.table(category_counts_table)
 
-# Menghitung jumlah berita per kategori sesuai urutan PESTEL
-category_counts = data['category'].value_counts().reindex(categories_order, fill_value=0)
+# Menampilkan jumlah total berita per kategori di bawah tabel
+st.markdown("#### Total Berita per Kategori")
+for index, row in category_counts_table.iterrows():
+    st.write(f"{row['Kategori']}: {row['Jumlah Berita']} berita")
 
 # Membuat pie chart dengan persentase
 pestel_counts = data['category'].value_counts().reindex(categories_order, fill_value=0).reset_index()
